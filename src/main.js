@@ -140,6 +140,22 @@ const updateTimeIndicator = () => {
 	passed.innerText = secondsToTime(passedTime);
 	rest.innerText = window.timeIndicator == 'remain' ? '-' + secondsToTime(remainTime) : secondsToTime(totalTime);
 }
+const updateTimeIndicatorPosition = () => {
+	const selectorList = ['.brt', '.speed', '.audioEffect', '.spk'];
+	let leftestButton;
+	for (const selector of selectorList) {
+		leftestButton = document.querySelector('.m-player ' + selector);
+		if (!leftestButton) {
+			continue;
+		}
+		if (leftestButton.childElementCount != 0) {
+			break;
+		}
+	}
+	const right = parseInt(window.getComputedStyle(leftestButton).right) + leftestButton.clientWidth + 10;
+	document.querySelector('#time-indicator').style.right = right + 'px';
+}
+
 
 
 plugin.onLoad(async (p) => {
@@ -165,12 +181,19 @@ plugin.onLoad(async (p) => {
 			}
 			setSetting('time-indicator', window.timeIndicator);
 			updateTimeIndicator();
+			updateTimeIndicatorPosition();
 		});
 
 		new MutationObserver((mutations) => {
 			updateTimeIndicator();
-			console.log("asdasdsad");
 		}).observe(document.querySelector('time.now'), { childList: true });
+		new MutationObserver(() => {
+			updateTimeIndicatorPosition();
+		}).observe(document.querySelector('#main-player .brt'), { childList: true });
+		
+		new MutationObserver(() => {
+			updateTimeIndicatorPosition();
+		}).observe(document.querySelector('#main-player .speed'), { childList: true });
 	});
 });
 
