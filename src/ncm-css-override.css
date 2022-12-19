@@ -1,0 +1,92 @@
+.p-artrank {
+    background-color: var(--md-accent-color-bg);
+}
+.u-select .sltwrap {
+    background: var(--md-accent-color-bg);
+}
+.u-headmulti {
+    background: var(--md-accent-color-bg);
+}
+.u-atsuggest {
+    background: var(--md-accent-color-bg);
+}
+.m-tblist-rdi-mul .u-cklist input[type="checkbox"] + span {
+    background: var(--md-accent-color-bg);
+}
+.m-newdvdlst-date {
+    background: var(--md-accent-color-bg);
+}
+.n-sdlst-tre .top li.lstchld:after,
+.n-sdlst-tre .top p.has i,
+.n-sdlst-tre .top li.lst:after {
+    background: var(--md-accent-color-bg);
+}
+.n-leadkugou {
+    background: var(--md-accent-color-bg);
+}
+.g-single {
+    background: var(--md-accent-color-bg);
+}
+.m-fm .fmplay .covers::after {
+    background: -webkit-linear-gradient(
+        left,
+        transparent 0%,
+        rgba(var(--md-accent-color-bg-rgb), 0.9) 20%,
+        var(--md-accent-color-bg) 100%
+    );
+}
+.g-setHd,
+.g-sd-set,
+.g-mn-set {
+    background: var(--md-accent-color-bg);
+}
+.n-topicside .search .tit {
+    background: var(--md-accent-color-bg);
+}
+.m-timeline .m-dtool {
+    background: var(--md-accent-color-bg);
+}
+.m-timeline .tpcbtns {
+    background: var(--md-accent-color-bg);
+}
+.u-link:hover {
+    background: var(--md-accent-color-bg);
+}
+.m-comment-timeline .citm .reply {
+    background: var(--md-accent-color-bg);
+    border: none;
+}
+.m-skswitch .checked {
+    border-color: var(--md-accent-color-bg);
+}
+.u-lclguide {
+    background: var(--md-accent-color-bg);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+.m-hqslt,
+.m-hqslt li:hover {
+    background: var(--md-accent-color-bg);
+}
+.m-guide .cls {
+    border: 1px solid var(--md-accent-color-bg);
+}
+.m-backtotop:hover {
+    background: var(--md-accent-color-bg);
+}
+.m-tabwrap {
+    background: var(--md-accent-color-bg);
+}
+.u-icn-dld_ok svg,
+.u-icn-dld_ready svg {
+    fill: var(--md-accent-color-bg);
+    color: var(--md-accent-color-bg);
+}
+.u-sign-cloud,
+.u-sign-cloud:before {
+    background: var(--md-accent-color-bg);
+}
+.u-tag-redline .disk,
+.u-ibtn-redline .disk {
+    fill: var(--md-accent-color-bg);
+}
