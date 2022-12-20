@@ -156,6 +156,96 @@ const updateTimeIndicatorPosition = () => {
 	document.querySelector('#time-indicator').style.right = right + 'px';
 }
 
+const updateGreeting = () => {
+	const timeSegments = [
+		[0, 3, '夜深了'],
+		[3, 6, '凌晨好'],
+		[6, 12, '早上好'],
+		[12, 18, '下午好'],
+		[18, 23, '晚上好'],
+		[23, 24, '夜深了']
+	];
+	const now = new Date();
+	const hour = now.getHours();
+	for (const segment of timeSegments) {
+		if (hour >= segment[0] && hour < segment[1]) {
+			document.body.style.setProperty('--md-greeting', `'${segment[2]}'`);
+			break;
+		}
+	}
+}
+const initRecommendPlaylists = (force = false) => {
+	if (force) {
+		document.querySelector('.md-today-recommend').remove();
+	}
+	const container = force ? document.querySelector('.g-mn .p-recmd') : document.querySelector('.g-mn .p-recmd:not(.patched)');
+	if (!container) {
+		return;
+	}
+	container.classList.add('patched');
+
+	const bannerBox = container.querySelector('.g-mn .p-recmd .m-banner');
+	const listBox = container.querySelector('.g-mn .p-recmd .m-list-recmd[data-nej-selector="__nPlaylistBox"]');
+
+	const recommendBox = document.createElement('div');
+	recommendBox.classList.add('md-today-recommend');
+	bannerBox.parentNode.insertBefore(recommendBox, bannerBox.nextSibling);
+	for (let i = 0; i < 2; i++) {
+		recommendBox.appendChild(listBox.children[0]);
+	}
+	let pos = 0;
+	while (pos < listBox.children.length) {
+		const item = listBox.children[pos];
+		const title = item.querySelector('.desc a *');
+		if (title && title.innerText.match(/^\[(.*?)\] /)) {
+			recommendBox.appendChild(item);
+		} else {
+			pos++;
+		}
+	}
+
+	const items = recommendBox.querySelectorAll('li');
+	for (let item of items) {
+		const playBtn = item.querySelector('.ply');
+		item.appendChild(playBtn);
+
+		const title = item.querySelector('.desc a *');
+		if (title && title.innerText.includes('私人雷达')) {
+			const subtitle = (title.innerText.match(/《(.*?)》/) ?? ['', '根据听歌记录为你打造'])[1];
+			title.innerHTML = '私人雷达';
+			title.insertAdjacentHTML('afterend', `<div class="subtitle">${subtitle}</div>`);
+		}
+		if (title && title.innerText.match(/^\[(.*?)\] /)) {
+			title.innerHTML = title.innerText.match(/^\[(.*?)\] /)[1];
+		}
+	}
+}
+const removeRedundantPlaylists = () => {
+	const listBox = document.querySelector('.g-mn .p-recmd .m-list-recmd[data-nej-selector="__nPlaylistBox"]');
+	if (!listBox) {
+		return;
+	}
+	if (listBox.childElementCount != 10) {
+		return;
+	}
+	if (!document.querySelector('.md-today-recommend') || document.querySelector('.md-today-recommend').childElementCount == 0) {
+		initRecommendPlaylists();
+		return;
+	}
+	for (let i = 0; i < 2; i++) {
+		listBox.children[0].remove();
+	}
+	let pos = 0;
+	while (pos < listBox.children.length) {
+		const item = listBox.children[pos];
+		const title = item.querySelector('.desc a *');
+		if (title && title.innerText.match(/^\[(.*?)\] /)) {
+			item.remove();
+		} else {
+			pos++;
+		}
+	}
+}
 
 
 plugin.onLoad(async (p) => {
@@ -193,8 +283,21 @@ plugin.onLoad(async (p) => {
 		
 		new MutationObserver(() => {
 			updateTimeIndicatorPosition();
-		}).observe(document.querySelector('#main-player .speed'), { childList: true });
+		}).observe(document.querySelector('#main-player .speed'), { childList: true});
 	});
+
+	// Greeting and two recomment playlists
+	setInterval(() => {
+		updateGreeting();
+	}, 30000);
+	updateGreeting();
+	waitForElement('.g-mn', (dom) => {
+		new MutationObserver(() => {
+			initRecommendPlaylists();
+			removeRedundantPlaylists();
+		}).observe(dom, { childList: true, subtree: true });
+	});
+
 });
 
 plugin.onConfig((tools) => {
