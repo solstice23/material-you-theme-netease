@@ -90,3 +90,36 @@
 .u-ibtn-redline .disk {
     fill: var(--md-accent-color-bg);
 }
+.s-fc2 {
+    color: var(--md-accent-color);
+}
+
+.u-icn-upload.z-ing,
+.u-icn-download.z-ing {
+    fill: rgba(var(--md-accent-color-rgb), 0.8);
+    color: rgba(var(--md-accent-color-rgb), 0.8);
+}
+.u-icn-selected {
+    background: rgba(var(--md-accent-color-rgb), 0.8);
+}
+.u-probar .pro {
+    background: rgba(var(--md-accent-color-rgb), .8);
+}
+.n-local .cldstat .statcurr {
+    background: rgba(var(--md-accent-color-rgb), 0.8);
+}
+.n-local .cldstat .statcurr.z-full {
+    background: rgba(var(--md-accent-color-rgb), 0.8);
+}
+.n-setcnt .capbar .curr {
+    background: rgba(var(--md-accent-color-rgb), 0.8);
+}
+.m-dlist .src-unknow .cover {
+    background: rgba(var(--md-accent-color-rgb), 0.8);
+}
+.m-uinfo {
+    background: var(--md-accent-color-bg-darken);
+}
+.u-arrlay .msghd {
+    background: var(--md-accent-color-bg-darken);
+}
