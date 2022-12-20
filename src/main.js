@@ -225,7 +225,7 @@ const removeRedundantPlaylists = () => {
 	if (!listBox) {
 		return;
 	}
-	if (listBox.childElementCount != 10) {
+	if (listBox.querySelectorAll('li:not(:empty)').length != 10) {
 		return;
 	}
 	if (!document.querySelector('.md-today-recommend') || document.querySelector('.md-today-recommend').childElementCount == 0) {
