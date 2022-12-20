@@ -7,7 +7,7 @@
     "description": "Material You 主题",
     "preview": "preview.jpg",
     "version": "0.0.1",
-    "type": "extension",
+    "type": "theme",
     "requirements": [],
     "betterncm_version": "^0.2.5",
     "injects": {
