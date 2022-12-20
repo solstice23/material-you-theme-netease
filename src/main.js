@@ -89,11 +89,46 @@ const accentColorPresets = {
 		'primary': [189, 230, 251],
 		'bg': [30, 37, 41],
 		'bg-darken': [23, 29, 32]
+	},
+	'dark-gray': {
+		'primary': [255, 255, 255],
+		'bg': [32, 32, 32],
+		'bg-darken': [25, 25, 25]
+	},
+	'dark-green': {
+		'primary': [183, 241, 222],
+		'bg': [26, 36, 33],
+		'bg-darken': [21, 28, 25]
+	},
+	'dark-orange': {
+		'primary': [255, 200, 182],
+		'bg': [39, 30, 27],
+		'bg-darken': [30, 23, 21]
+	},
+	'dark-purple': {
+		'primary': [216, 196, 241],
+		'bg': [34, 31, 38],
+		'bg-darken': [26, 24, 30]
+	},
+	'dark-red': {
+		'primary': [253, 180, 180],
+		'bg': [39, 27, 27],
+		'bg-darken': [30, 21, 21]
+	},
+	'dark-pink': {
+		'primary': [255, 217, 228],
+		'bg': [54, 41, 41],
+		'bg-darken': [33, 26, 26]
+	},
+	'dark-rose-pine': {
+		'primary': [235, 188, 186],
+		'bg': [35, 33, 54],
+		'bg-darken': [57, 53, 82]
 	}
 }
 
 const initSettings = () => {
-	const scheme = getSetting('scheme', 'dark-blue');
+	let scheme = getSetting('scheme', 'dark-blue');
 	if (!accentColorPresets[scheme]) {
 		scheme = 'dark-blue';
 	}

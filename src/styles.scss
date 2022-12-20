@@ -510,6 +510,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				border-radius: 100px;
 				transition: all .25s ease;
 				position: relative;
+				background-color: transparent;
 				&::before {
 					content: '';
 					display: block;
@@ -579,6 +580,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			&:hover {
 				background-color: rgba(var(--md-accent-color-rgb), 0.12);
 			}
+		}
+		.j-listentosong a{
+			background-color: transparent;
 		}
 		.skin, .set, .msg, .j-listentosong a{
 			width: 36px;
