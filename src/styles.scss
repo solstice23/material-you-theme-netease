@@ -1366,6 +1366,12 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				border-radius: 16px;
 				padding-top: 10px;
 				padding-bottom: 10px;
+				.lst {
+					padding: 0;
+					> .pl-di {
+						display: block;
+					}
+				}
 				.itm {
 					min-height: $item-height;
 					background: transparent !important;
@@ -1754,4 +1760,8 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		}
 	}
 
+	// Special fixes
+	.m-plylist-lrc .trans {
+		display: inline;
+	}
 }

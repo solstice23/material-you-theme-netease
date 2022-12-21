@@ -361,6 +361,38 @@ plugin.onLoad(async (p) => {
 	waitForElement('header .m-tool .user', (dom) => {
 		initSettingMenu();
 	});
+
+	// Fix playlist scroll
+	waitForElement('.g-mn', (dom) => {
+		const listScrollVisibilityController = document.createElement('style');
+		listScrollVisibilityController.innerHTML = '';
+		document.head.appendChild(listScrollVisibilityController);
+		dom.addEventListener('scroll', () => {
+			const listContainer = document.querySelector('.m-plylist-pl2 ul .lst');
+			if (!listContainer) {
+				listScrollVisibilityController.innerHTML = '';
+				return;
+			}
+			const topOfList = Math.max(-(listContainer.getBoundingClientRect().top - 60), 0);
+			const listLength = listContainer.childElementCount;
+			const currentVisibleChild = Math.floor(topOfList / 1000) + 1;
+			const l = Math.max(currentVisibleChild - 2, 1), r = Math.min(currentVisibleChild + 2, listLength);
+			let css = `.m-plylist-pl2 ul .lst {
+				padding-top: ${(l - 1) * 1000}px !important;
+				padding-bottom: ${(listLength - r) * 1000}px !important;
+				counter-reset: tlistorder ${(l - 1) * 20} !important;
+			}`;
+			for (let i = 1; i <= l - 1; i++) {
+				css += `.m-plylist-pl2 ul .lst > div:nth-child(${i}) { display: none !important; }`;
+			}
+			for (let i = r + 1; i <= listLength; i++) {
+				css += `.m-plylist-pl2 ul .lst > div:nth-child(${i}) { display: none !important; }`;
+			}
+			if (listScrollVisibilityController.innerHTML != css) {
+				listScrollVisibilityController.innerHTML = css;
+			}
+		});
+	});
 });
 
 plugin.onConfig((tools) => {
