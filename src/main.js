@@ -1,4 +1,5 @@
 import './styles.scss';
+import { schemePresets } from './scheme-presets.js';
 
 let pluginPath;
 const loadFile = async (path) => {
@@ -84,58 +85,61 @@ const updateAccentColor = ([r, g, b], name = '') => {
 	document.body.style.setProperty(name + '-rgb', `${r}, ${g}, ${b}`);
 }
 
-const accentColorPresets = {
-	'dark-blue': {
-		'primary': [189, 230, 251],
-		'bg': [30, 37, 41],
-		'bg-darken': [23, 29, 32]
-	},
-	'dark-gray': {
-		'primary': [255, 255, 255],
-		'bg': [32, 32, 32],
-		'bg-darken': [25, 25, 25]
-	},
-	'dark-green': {
-		'primary': [183, 241, 222],
-		'bg': [26, 36, 33],
-		'bg-darken': [21, 28, 25]
-	},
-	'dark-orange': {
-		'primary': [255, 200, 182],
-		'bg': [39, 30, 27],
-		'bg-darken': [30, 23, 21]
-	},
-	'dark-purple': {
-		'primary': [216, 196, 241],
-		'bg': [34, 31, 38],
-		'bg-darken': [26, 24, 30]
-	},
-	'dark-red': {
-		'primary': [253, 180, 180],
-		'bg': [39, 27, 27],
-		'bg-darken': [30, 21, 21]
-	},
-	'dark-pink': {
-		'primary': [255, 217, 228],
-		'bg': [54, 41, 41],
-		'bg-darken': [33, 26, 26]
-	},
-	'dark-rose-pine': {
-		'primary': [235, 188, 186],
-		'bg': [35, 33, 54],
-		'bg-darken': [57, 53, 82]
+const setHref = (id, href) => {
+	const dom = document.getElementById(id);
+	if (!dom) {
+		return;
+	}
+	if (dom.href != href) {
+		dom.href = href;
 	}
 }
 
-const initSettings = () => {
-	let scheme = getSetting('scheme', 'dark-blue');
-	if (!accentColorPresets[scheme]) {
+const overrideNCMCSS = (mutated) => {
+	if (mutated == 'pri-skin-gride') {
+		setHref(
+			'pri-skin-gride',
+			window.mdThemeType == 'dark' ? 'orpheus://skin/default/default/web/css/skin.ls.css' : 'orpheus://skin/default/red/web/css/skin.ls.css'
+		);
+	} else if (mutated == 'skin_default') {
+		if (document.getElementById('skin_fullscreen').href.endsWith(".css")) {
+			return;
+		}
+		setHref(
+			'skin_default',
+			window.mdThemeType == 'dark' ? 'orpheus://orpheus/style/res/less/default/css/skin.ls.css' : 'orpheus://orpheus/pub/app.html'
+		);
+	}
+}
+
+const applyScheme = (scheme) => {
+	if (!schemePresets[scheme]) {
 		scheme = 'dark-blue';
 	}
-	const preset = accentColorPresets[scheme];
+
+	const preset = schemePresets[scheme];
+	if (!preset['secondary']) {
+		preset['secondary'] = preset['primary'];
+	}
+	if (preset['light']) {
+		preset['grey-base'] ??= [0, 0, 0];
+		window.mdThemeType = 'light';
+	} else {
+		preset['grey-base'] ??= [255, 255, 255];
+		window.mdThemeType = 'dark';
+	}
 	for (const name in preset) {
+		if (name == 'light') {
+			continue;
+		}
 		updateAccentColor(preset[name], name);
 	}
+	overrideNCMCSS('pri-skin-gride');
+	overrideNCMCSS('skin_default');
+}
+
+const initSettings = () => {	
+	applyScheme(getSetting('scheme', 'dark-blue'));
 
 	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing', true));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
@@ -217,7 +221,6 @@ const initRecommendPlaylists = (force = false) => {
 	if (!container) {
 		return;
 	}
-	container.classList.add('patched');
 
 	const bannerBox = container.querySelector('.g-mn .p-recmd .m-banner');
 	const listBox = container.querySelector('.g-mn .p-recmd .m-list-recmd[data-nej-selector="__nPlaylistBox"]');
@@ -253,6 +256,11 @@ const initRecommendPlaylists = (force = false) => {
 		if (title && title.innerText.match(/^\[(.*?)\] /)) {
 			title.innerHTML = title.innerText.match(/^\[(.*?)\] /)[1];
 		}
+	}
+
+	container.classList.add('patched');
+	if (window.initRecommendPlaylistsInterval) {
+		clearInterval(window.initRecommendPlaylistsInterval);
 	}
 }
 const removeRedundantPlaylists = () => {
@@ -380,6 +388,9 @@ plugin.onLoad(async (p) => {
 			initRecommendPlaylists();
 			removeRedundantPlaylists();
 		}).observe(dom, { childList: true, subtree: true });
+		window.initRecommendPlaylistsInterval = setInterval(() => {
+			initRecommendPlaylists();
+		}, 100);
 	});
 
 
@@ -399,6 +410,9 @@ plugin.onLoad(async (p) => {
 		recalculateTitleSize();
 	});
 
+	// observer theme change
+	new MutationObserver(() => { overrideNCMCSS('pri-skin-gride'); }).observe(document.getElementById('pri-skin-gride'), { attributes: true });
+	new MutationObserver(() => { overrideNCMCSS('skin_default'); }).observe(document.getElementById('skin_default'), { attributes: true });
 });
 
 plugin.onConfig((tools) => {
