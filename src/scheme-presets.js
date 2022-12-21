@@ -40,13 +40,6 @@ export const schemePresets = {
 		'bg': [35, 33, 54],
 		'bg-darken': [57, 53, 82]
 	},
-	'light-rose-pine': {
-		'primary': [215, 130, 126],
-		'secondary': [87, 82, 121],
-		'bg': [242, 233, 225],
-		'bg-darken': [250, 244, 237],
-		'light': true
-	},
 	'light-blue': {
 		'primary': [34, 197, 253],
 		'secondary': [18, 51, 84],
@@ -96,6 +89,13 @@ export const schemePresets = {
 		'bg-darken': [255, 255, 255],
 		'light': true
 	},
+	'light-rose-pine': {
+		'primary': [215, 130, 126],
+		'secondary': [87, 82, 121],
+		'bg': [242, 233, 225],
+		'bg-darken': [250, 244, 237],
+		'light': true
+	},
 	'tokyo-night': {
 		'primary': [181, 185, 214],
 		'bg': [36, 38, 56],
@@ -143,11 +143,41 @@ export const schemePresets = {
 		'bg': [40, 44, 52],
 		'bg-darken': [33, 37, 43]
 	},
-	'youtube': {
-		'primary': [255, 144, 0],
-		'secondary': [255, 255, 255],
-		'bg': [0, 0, 0],
-		'bg-darken': [27, 27, 27]
+	'osu-pink': {
+		'primary': [255, 102, 171],
+		'secondary': [240, 219, 228],
+		'bg': [42, 34, 38],
+		'bg-darken': [28, 23, 25],
+	},
+	'osu-purple': {
+		'primary': [140, 102, 255],
+		'secondary': [224, 219, 240],
+		'bg': [36, 34, 42],
+		'bg-darken': [24, 23, 28],
+	},
+	'osu-blue': {
+		'primary': [102, 204, 255],
+		'secondary': [219, 233, 240],
+		'bg': [34, 40, 42],
+		'bg-darken': [23, 26, 28],
+	},
+	'osu-green': {
+		'primary': [115, 255, 102],
+		'secondary': [221, 240, 219],
+		'bg': [35, 42, 34],
+		'bg-darken': [23, 28, 23],
+	},
+	'osu-orange': {
+		'primary': [255, 153, 102],
+		'secondary': [240, 226, 219],
+		'bg': [42, 37, 34],
+		'bg-darken': [28, 25, 23],
+	},
+	'osu-yellow': {
+		'primary': [255, 217, 102],
+		'secondary': [240, 235, 219],
+		'bg': [42, 40, 34],
+		'bg-darken': [28, 27, 23],
 	},
 	'cyberpunk': {
 		'primary': [252, 236, 12],
@@ -158,5 +188,5 @@ export const schemePresets = {
 		'primary': [240, 240, 240],
 		'bg': [0, 0, 0],
 		'bg-darken': [20, 20, 20]
-	},
+	}
 }

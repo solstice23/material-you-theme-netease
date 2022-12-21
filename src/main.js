@@ -1,5 +1,7 @@
 import './styles.scss';
+import { injectHTML, waitForElement, getSetting, setSetting } from './utils.js';
 import { schemePresets } from './scheme-presets.js';
+import { initSettingMenu } from './settings.js';
 
 let pluginPath;
 const loadFile = async (path) => {
@@ -8,65 +10,6 @@ const loadFile = async (path) => {
     return await betterncm.fs.readFileText(fullPath);
 }
 
-const injectCSS = (css) => {
-	const style = document.createElement('style');
-	style.innerHTML = css;
-	document.head.appendChild(style);
-}
-const injectHTML = (type, html, parent, fun = (dom) => {}) => {
-	const dom = document.createElement(type);
-	dom.innerHTML = html;
-	fun.call(this, dom);
-
-	parent.appendChild(dom);
-	return dom;
-}
-var loadedJs = {};
-const loadJsOnce = async (path) => {
-	if (loadedJs[path]) {
-		return;
-	}
-	loadedJs[path] = true;
-	const js = await loadFile(path);
-	const script = document.createElement('script');
-	script.innerHTML = js;
-	document.body.appendChild(script);
-}
-const waitForElement = (selector, fun) => {
-	selector = selector.split(',');
-	let done = true;
-	let interval = setInterval(() => {
-		for (const s of selector) {
-			if (!document.querySelector(s)) {
-				done = false;
-			}
-		}
-		if (done) {
-			clearInterval(interval);
-			for (const s of selector) {
-				fun.call(this, document.querySelector(s));
-			}
-		}
-	}, 100);
-}
-
-const getSetting = (option, defaultValue = '') => {
-	option = "material-you-theme-" + option;
-	let value = localStorage.getItem(option);
-	if (!value) {
-		value = defaultValue;
-	}
-	if (value === 'true') {
-		value = true;
-	} else if (value === 'false') {
-		value = false;
-	}
-	return value;
-}
-const setSetting = (option, value) => {
-	option = "material-you-theme-" + option;
-	localStorage.setItem(option, value);
-}
 const addOrRemoveGlobalClassByOption = (className, optionValue) => {
 	if (optionValue) {
 		document.body.classList.add(className);
@@ -112,15 +55,15 @@ const overrideNCMCSS = (mutated) => {
 	}
 }
 
-const applyScheme = (scheme) => {
+export const applyScheme = (scheme) => {
 	if (!schemePresets[scheme]) {
 		scheme = 'dark-blue';
 	}
 
 	const preset = schemePresets[scheme];
-	if (!preset['secondary']) {
-		preset['secondary'] = preset['primary'];
-	}
+
+	preset['secondary'] ??= preset['primary'];
+
 	if (preset['light']) {
 		preset['grey-base'] ??= [0, 0, 0];
 		window.mdThemeType = 'light';
@@ -413,10 +356,18 @@ plugin.onLoad(async (p) => {
 	// observer theme change
 	new MutationObserver(() => { overrideNCMCSS('pri-skin-gride'); }).observe(document.getElementById('pri-skin-gride'), { attributes: true });
 	new MutationObserver(() => { overrideNCMCSS('skin_default'); }).observe(document.getElementById('skin_default'), { attributes: true });
+
+	// init setting menu
+	waitForElement('header .m-tool .user', (dom) => {
+		initSettingMenu();
+	});
 });
 
 plugin.onConfig((tools) => {
 	return dom("div", {},
-		dom("span", { innerHTML: "TODO" , style: { fontSize: "18px" } }),
+		dom("span", { innerHTML: "点击顶栏的画板图标以调整设置 " , style: { fontSize: "18px" } }),
+		tools.makeBtn("打开", async () => {
+			document.querySelector("#md-theme-setting-btn:not(.active)").click();
+		})
 	);
 });
