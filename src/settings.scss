@@ -75,10 +75,7 @@ body.ignore-now-playing.mq-playing {
 		display: none !important;
 	}
 	#md-theme-setting-btn {
-		background-color: transparent !important;
-		div {
-			background-color: rgba(var(--md-accent-color-secondary-rgb), 0.7) !important;
-		}
+		display: none !important;
 	}
 }
 
@@ -254,7 +251,7 @@ body.ignore-now-playing.mq-playing {
 	}
 	.md-checkbox {
 		appearance: none;
-		background-color: rgba(var(--md-accent-color-secondary-rgb), 0.15);
+		background-color: rgba(var(--md-accent-color-secondary-rgb), 0.12);
 		border-radius: 72px;
 		border-style: none;
 		flex-shrink: 0;
