@@ -1389,7 +1389,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 							font-size: 15px;
 							.tit {
 								color: rgba(var(--md-accent-color-secondary-rgb), .8) !important;
-								> span {
+								> span.s-fc4, .trans {
 									color: rgba(var(--md-accent-color-secondary-rgb), .3);
 								}
 								i, i svg{
@@ -1423,6 +1423,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 								transform: translateY(-2px);
 							}
 						}
+					}
+					&.z-nocyr {
+						opacity: .3;
 					}
 				}
 				.itm:before { // number
