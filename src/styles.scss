@@ -146,13 +146,59 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			}
 		}
 		.btnp { // play and pause button
-			background-color: var(--md-accent-color);
+			width: 36px;
+			height: 36px;
+			background-color: transparent;
 			transition: transform 0.25s ease;
+			position: relative;
 			svg {
-				fill: var(--md-accent-color-bg);
+				width: 50%;
+				height: 100%;
+				max-height: unset;
+				margin: 0;
+				display: block !important;
+				background-color: var(--md-accent-color-bg);
+				fill: transparent;
+				transition: clip-path .2s ease;
+				position: absolute;
+				top: 0;
+				will-change: clip-path;
+				&:first-child {
+					left: 0;
+				}
+				&:last-child {
+					left: 50%;
+				}
 			}
-			&:hover {
-				transform: translateY(-50%) scale(1.1);
+			&.btnp-pause svg {
+				&:first-child {
+					clip-path: polygon(72% 30%, 86% 30%, 86% 70%, 72% 70%);
+				}
+				&:last-child {
+					clip-path: polygon(14% 30%, 28% 30%, 28% 70%, 14% 70%);
+				}
+			}
+			&.btnp-play svg {
+				&:first-child {
+					clip-path: polygon(76% 30%, 100% 37.5%, 100% 63.75%, 76% 72%);
+				}
+				&:last-child {
+					clip-path: polygon(0% 37.5%, 40% 50%, 40% 50%, 0% 63.75%);
+				}
+			}
+			&::before {
+				content: '';
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				display: block;
+				background-color: var(--md-accent-color);
+				border-radius: 100px;
+				transition: transform 0.25s ease;
+			}
+			&:hover::before {
+				transform: scale(1.1);
 			}
 		}
 		.brt, .speed { //right buttons
