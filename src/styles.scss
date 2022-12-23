@@ -1545,6 +1545,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					}
 				}
 			}
+			.n-norlt {
+				margin-bottom: 80px;
+			}
 		}
 		.u-tab2 + * > .m-plylist {
 			margin-top: 0px;
