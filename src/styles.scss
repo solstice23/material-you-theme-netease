@@ -1426,6 +1426,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					width: calc(100% - 20px);
 					transition: background-color .3s ease;
 					&:hover {
+						@include mixed-background-color-important(var(--md-accent-color-bg-darken-rgb), var(--md-accent-color-rgb), 0.06);
+					}
+					&.z-sel {
 						@include mixed-background-color-important(var(--md-accent-color-bg-darken-rgb), var(--md-accent-color-rgb), 0.1);
 					}
 					.td {
@@ -1816,7 +1819,12 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 
 	// Special fixes
-	.m-plylist-lrc .trans {
-		display: inline;
+	.m-plylist-lrc {
+		.trans {
+			display: inline;
+		}
+		.trbg {
+			height: 50px;
+		}
 	}
 }

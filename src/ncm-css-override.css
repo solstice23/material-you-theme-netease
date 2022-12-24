@@ -123,3 +123,6 @@
 .u-arrlay .msghd {
     background: var(--md-accent-color-bg-darken);
 }
+div.m-layer .lyct, div.m-layer, div.m-layer .zcnt {
+    background: var(--md-accent-color-bg);
+}
