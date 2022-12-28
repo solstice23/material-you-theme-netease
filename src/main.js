@@ -214,23 +214,7 @@ const removeRedundantPlaylists = () => {
 	if (listBox.querySelectorAll('li:not(:empty)').length != 10) {
 		return;
 	}
-	if (!document.querySelector('.md-today-recommend') || document.querySelector('.md-today-recommend').childElementCount == 0) {
-		initRecommendPlaylists();
-		return;
-	}
-	for (let i = 0; i < 2; i++) {
-		listBox.children[0].remove();
-	}
-	let pos = 0;
-	while (pos < listBox.children.length) {
-		const item = listBox.children[pos];
-		const title = item.querySelector('.desc a *');
-		if (title && title.innerText.match(/^\[(.*?)\] /)) {
-			item.remove();
-		} else {
-			pos++;
-		}
-	}
+	initRecommendPlaylists(true);
 }
 
 let lastPlaylistTitle = "";
