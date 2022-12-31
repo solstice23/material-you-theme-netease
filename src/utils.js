@@ -13,8 +13,8 @@ export const injectHTML = (type, html, parent, fun = (dom) => {}) => {
 }
 export const waitForElement = (selector, fun) => {
 	selector = selector.split(',');
-	let done = true;
-	let interval = setInterval(() => {
+	let interval = setInterval(() => {		
+		let done = true;
 		for (const s of selector) {
 			if (!document.querySelector(s)) {
 				done = false;

@@ -681,6 +681,13 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		.skin {
 			display: none !important;
 		}
+		.set[title='BetterNCM'] svg { // betterncm settings btn
+			fill: rgba(var(--md-accent-color-secondary-rgb), 0.7);
+			-webkit-mask: none;
+			background: transparent;
+			width: 24px;
+			height: 24px;
+		}
 
 		// popup
 		.u-arrlay, div.u-arrlay {
