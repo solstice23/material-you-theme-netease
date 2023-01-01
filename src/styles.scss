@@ -200,6 +200,24 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			&:hover::before {
 				transform: scale(1.1);
 			}
+			&::after {
+				content: '';
+				display: block;
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				background-color: var(--md-accent-color-bg);
+				clip-path: polygon(38% 30%, 70% 50%, 38% 72%);
+				opacity: 0;
+			}
+			&.btnp-play::after {
+				transition-property: opacity;
+				transition-duration: 0s;
+				transition-delay: 0.2s;
+				opacity: 1;
+			}
 		}
 		.brt, .speed { //right buttons
 			opacity: .8;
