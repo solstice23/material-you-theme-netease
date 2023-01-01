@@ -746,7 +746,8 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 
 	// Main: Tabs & settings tab
 	.m-tabwrap {
-		position: sticky;
+		/*position: sticky;*/
+		position: static;
 		width: 100%;
 		padding: 0;
 		margin: 0;
@@ -755,6 +756,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		margin-bottom: 0;
 		display: flex;
 		justify-content: center;
+		background-color: transparent !important;
 	}
 	.m-tab, .u-tab2 > ul:not(.u-stab), ul.u-tab2 {
 		border-radius: 200px;
