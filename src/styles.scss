@@ -458,6 +458,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			display: none;
 		}
 	}
+	.m-player-fm .prg-spk {
+		right: 60px;
+	}
 
 	// Left sidebar
 	.g-sd {
@@ -1850,6 +1853,28 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			@include mixed-background-color(var(--md-accent-color-bg-rgb), var(--md-accent-color-rgb), 1);
 			border-radius: 24px;
 		}
+	}
+	// Components: snack bar
+	.u-result .wrap .inner {
+		position: fixed;
+		bottom: calc(var(--bottombar-height) + 10px);
+		border-radius: 12px;
+		background: rgba(var(--md-accent-color-bg-rgb), 0.9);
+		transform-origin: bottom;
+		animation: snackbar-show 0.2s ease both;
+		.errTxt {
+			color: #f66;
+		}
+	}
+	@keyframes snackbar-show {
+		0% {
+			transform: scaleY(0.9) translateY(50%);
+			opacity: 0;
+		}
+		100% {
+			transform: none;
+			opacity: 1;
+		}		
 	}
 
 	// Special fixes
