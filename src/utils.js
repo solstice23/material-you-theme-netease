@@ -45,3 +45,31 @@ export const setSetting = (option, value) => {
 	option = "material-you-theme-" + option;
 	localStorage.setItem(option, value);
 }
+export const makeToast = (html, duration = 1000) => {
+	let noIntroAnimation = false;
+	if (document.querySelector('.md-toast')) {
+		console.log(document.querySelector('.md-toast'));
+		noIntroAnimation = true;
+		document.querySelector('.md-toast').remove();
+		console.log('remove');
+	}
+	const toast = document.createElement('div');
+	toast.classList.add('md-toast');
+	toast.classList.add('u-result');
+	toast.classList.add('j-tips');
+	toast.innerHTML = `
+		<div class="wrap">
+			<div class="inner j-flag" style="${ noIntroAnimation ? 'animation-duration: 0s;' : ''}">
+				${html}
+			</div>
+		</div>
+	`;
+	document.body.appendChild(toast);
+	setTimeout(() => {
+		toast.classList.add('z-hide');
+		toast.querySelector('.inner').style = '';
+	}, duration);
+	setTimeout(() => {
+		document.body.removeChild(toast);
+	}, duration + 500);
+}

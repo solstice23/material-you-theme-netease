@@ -1,5 +1,5 @@
 import './styles.scss';
-import { injectHTML, waitForElement, getSetting, setSetting } from './utils.js';
+import { injectHTML, waitForElement, getSetting, setSetting, makeToast } from './utils.js';
 import { schemePresets } from './scheme-presets.js';
 import { initSettingMenu } from './settings.js';
 
@@ -326,6 +326,24 @@ const recalculateTitleSize = (forceRefresh = false) => {
 	`;
 }
 
+const scrollToCurrentPlaying = () => {
+	const currentPlaying = document.querySelector('.m-plylist .itm.z-play') ?? document.querySelector('.m-plylist .itm.z-pause');
+	if (!currentPlaying) {
+		makeToast(`
+			<i class="icon u-icn u-icn-operatefail"></i>
+			<span class="u-tit f-ff2 errTxt">定位失败</span>`);
+		return;
+	}
+	const currentPlayingIndex =
+		Array.from(currentPlaying.parentNode.parentNode.children).indexOf(currentPlaying.parentNode) * 20 +
+		Array.from(currentPlaying.parentNode.children).indexOf(currentPlaying) + 1;
+	const currentPlayingOffset = 
+		document.querySelector('.m-plylist ul').offsetTop -
+		(document.documentElement.clientHeight / 2) +
+		currentPlayingIndex * 50 + 100;
+	document.querySelector('.g-mn').scrollTo(0, currentPlayingOffset);
+}
+
 
 plugin.onLoad(async (p) => {
 	pluginPath = p.pluginPath;
@@ -391,6 +409,20 @@ plugin.onLoad(async (p) => {
 			
 			// playlist title size recalculation
 			recalculateTitleSize();
+
+			// add custom jump to playing button
+			if (document.querySelector('.u-playinglocation')) {
+				if (!document.querySelector('.u-playinglocation + .u-playinglocation')) {
+					const button = document.createElement('button');
+					button.classList.add('u-playinglocation');
+					button.classList.add('j-flag');
+					button.innerHTML = '<svg><use xlink:href="orpheus://orpheus/style/res/svg/icon.sp.svg#playinglocation"></use></svg>';
+					button.addEventListener('click', () => {
+						scrollToCurrentPlaying();
+					});
+					document.querySelector('.u-playinglocation').after(button);
+				}
+			}
 		}).observe(dom, { childList: true, subtree: true });
 	});
 	window.addEventListener('resize', () => {

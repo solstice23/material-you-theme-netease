@@ -1840,24 +1840,28 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		transform: scale(0.8);
 		pointer-events: none;
 		cursor: pointer;
+		border: none;
 		svg {
 			fill: var(--md-accent-color-bg);
 			opacity: 1;
-		}
-		&.z-show {
-			transform: scale(1);
-			opacity: 1;
-			pointer-events: unset;
 		}
 		&:hover {
 			@include mixed-background-color(var(--md-accent-color-bg-rgb), var(--md-accent-color-rgb), 1);
 			border-radius: 24px;
 		}
+		&[data-action] {
+			display: none !important;
+		}
+	}
+	.u-playinglocation.z-show + .u-playinglocation, .u-playinglocation + .u-playinglocation:hover {
+		transform: scale(1);
+		opacity: 1;
+		pointer-events: unset;
 	}
 	// Components: snack bar
 	.u-result .wrap .inner {
 		position: fixed;
-		bottom: calc(var(--bottombar-height) + 10px);
+		bottom: calc(var(--bottombar-height) + 15px);
 		border-radius: 12px;
 		background: rgba(var(--md-accent-color-bg-rgb), 0.9);
 		transform-origin: bottom;
