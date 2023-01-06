@@ -469,6 +469,15 @@ plugin.onLoad(async (p) => {
 			}
 		});
 	});
+
+	// Fix toolbar button offset
+	waitForElement('.g-sd', (dom) => {
+		const toolbarLeftPart = document.querySelector('header.g-hd .m-leftbox');
+		new MutationObserver(() => {
+			toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style.width) - 199}px`);
+		}).observe(dom, { attributes: true, attributeFilter: ['style'] });
+		toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style.width) - 199}px`);
+	});
 });
 
 plugin.onConfig((tools) => {
