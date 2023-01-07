@@ -474,9 +474,9 @@ plugin.onLoad(async (p) => {
 	waitForElement('.g-sd', (dom) => {
 		const toolbarLeftPart = document.querySelector('header.g-hd .m-leftbox');
 		new MutationObserver(() => {
-			toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style.width) - 199}px`);
+			toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width ?? 199) - 199}px`);
 		}).observe(dom, { attributes: true, attributeFilter: ['style'] });
-		toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style.width) - 199}px`);
+		toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width ?? 199) - 199}px`);
 	});
 });
 
