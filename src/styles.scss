@@ -296,7 +296,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			position: fixed;
 			bottom: calc(var(--bottombar-height) - 20px);
 			border-radius: 12px;
-			background: rgba(var(--md-accent-color-bg-rgb), 0.9);
+			@include mixed-background-color(var(--md-accent-color-bg-rgb), var(--md-accent-color-rgb), 0.16);
 			color: var(--md-accent-color-secondary);
 			transform-origin: bottom;
 			border: none;
@@ -1957,12 +1957,14 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		position: fixed;
 		bottom: calc(var(--bottombar-height) + 15px);
 		border-radius: 12px;
-		background: rgba(var(--md-accent-color-bg-rgb), 0.9);
-		color: var(--md-accent-color-secondary);
+		@include mixed-background-color(var(--md-accent-color-bg-rgb), var(--md-accent-color-rgb), 0.16);
 		transform-origin: bottom;
 		animation: snackbar-show 0.2s ease both;
-		.errTxt {
-			color: #f66;
+		span {
+			color: var(--md-accent-color-secondary);
+			&.errTxt {
+				color: #f66;
+			}
 		}
 	}
 	@keyframes snackbar-show {
@@ -1973,7 +1975,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		100% {
 			transform: none;
 			opacity: 1;
-		}		
+		}
 	}
 	// Components: loading
 	.u-load {
