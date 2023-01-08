@@ -1074,7 +1074,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			opacity: 1;
 		}
 	}
-	// Main: playlist page button
+	// Main: playlist/artist page header and button
 	.g-mn {	
 		.m-info {
 			$button-space-height: 80px;
@@ -1092,6 +1092,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					display: block;
 					border: none;
 					padding: 0;
+					padding-left: 3px;
 				}
 				flex-direction: column;
 				gap: 15px;
@@ -1125,11 +1126,28 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 						height: 100% !important;
 						display: block;
 						max-height: unset;
+						fill: transparent;
 					}
 					&:hover {
 						background-color: rgba(var(--md-accent-color-secondary-rgb), 0.1);
 					}
 				}
+			}
+			.name-artist::before {
+				content: '艺术家';
+				height: 12px;
+				padding-left: 3px;
+				line-height: 12px;
+				border-radius: 3px;
+				font-size: 13px;
+				color: var(--md-accent-color-secondary);
+				margin-bottom: -7px;
+			}			
+			.nickname {
+				font-size: 20px;
+				color: var(--md-accent-color-secondary);
+				opacity: .8;
+				margin-bottom: 20px;
 			}
 			.btns {
 				position: absolute;
@@ -1205,14 +1223,14 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 						opacity: .3;
 					}
 				}
-				div:first-child ~ .u-ibtn5 {
+				div:first-child ~ .u-ibtn5, > .u-ibtn5 {
 					font-size: 0;
 					width: 56px;
 					height: 56px;
 					margin-right: 0;
 					margin-left: 10px;
 					border: none;
-					border-radius: 100px;
+					border-radius: 100px !important;
 					background-color: transparent;
 					position: relative;
 					transition: all .25s ease;
@@ -1241,10 +1259,10 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 						-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='40' width='40'%3E%3Cpath d='M9.458 33.333q-1.125 0-1.958-.833t-.833-1.958v-5.625h2.791v5.625h21.084v-5.625h2.791v5.625q0 1.125-.833 1.958t-1.958.833ZM20 26.875l-8.125-8.167 1.958-2 4.792 4.792V6.667h2.75V21.5l4.792-4.792 1.958 2Z'/%3E%3C/svg%3E");
 						-webkit-mask-size: unset;
 					}
-					&[data-res-action='fav']::before {
+					&[data-res-action='fav']::before, &[data-res-action='favart']::before {
 						-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='40' width='40'%3E%3Cpath d='m20 34.958-1.958-1.75q-4.334-3.958-7.167-6.833t-4.521-5.146Q4.667 18.958 4 17.104t-.667-3.771q0-3.791 2.563-6.354 2.562-2.562 6.312-2.562 2.334 0 4.334 1.062 2 1.063 3.458 3.021 1.625-2.042 3.583-3.062 1.959-1.021 4.209-1.021 3.75 0 6.312 2.562 2.563 2.563 2.563 6.354 0 1.917-.667 3.771-.667 1.854-2.354 4.125-1.688 2.271-4.521 5.146t-7.167 6.833Zm0-3.666q4.125-3.792 6.812-6.5 2.688-2.709 4.25-4.73 1.563-2.02 2.188-3.604.625-1.583.625-3.125 0-2.666-1.708-4.395-1.709-1.73-4.375-1.73-2.084 0-3.854 1.23-1.771 1.229-2.73 3.395h-2.416q-.959-2.125-2.73-3.375-1.77-1.25-3.854-1.25-2.666 0-4.375 1.73-1.708 1.729-1.708 4.395 0 1.584.625 3.167.625 1.583 2.188 3.625 1.562 2.042 4.25 4.729 2.687 2.688 6.812 6.438Zm0-12.042Z'/%3E%3C/svg%3E");
 					}
-					&[data-res-action='unfav']::before {
+					&[data-res-action='unfav']::before, &[data-res-action='unfavart']::before {
 						-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='40' width='40'%3E%3Cpath d='m20 34.958-1.958-1.75q-4.334-3.958-7.167-6.833t-4.521-5.146Q4.667 18.958 4 17.104t-.667-3.771q0-3.791 2.563-6.354 2.562-2.562 6.312-2.562 2.334 0 4.334 1.062 2 1.063 3.458 3.021 1.625-2.042 3.583-3.062 1.959-1.021 4.209-1.021 3.75 0 6.312 2.562 2.563 2.563 2.563 6.354 0 1.917-.667 3.771-.667 1.854-2.354 4.125-1.688 2.271-4.521 5.146t-7.167 6.833Z'/%3E%3C/svg%3E");
 					}
 					&[data-res-action='share']::before {
@@ -1325,7 +1343,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					}
 				}
 			}
-			.mnum {
+			.mnum { // 歌曲数，播放数 (歌单)
 				margin-top: 8px;
 				div {
 					display: inline-flex;
@@ -1355,6 +1373,43 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				}
 				div:last-child span:first-child {
 					-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='20' width='20'%3E%3Cpath d='m8 13.5 5.5-3.5L8 6.5Zm2 4.5q-1.646 0-3.104-.625-1.458-.625-2.552-1.719t-1.719-2.552Q2 11.646 2 10q0-1.667.625-3.115.625-1.447 1.719-2.541Q5.438 3.25 6.896 2.625T10 2q1.667 0 3.115.625 1.447.625 2.541 1.719 1.094 1.094 1.719 2.541Q18 8.333 18 10q0 1.646-.625 3.104-.625 1.458-1.719 2.552t-2.541 1.719Q11.667 18 10 18Zm0-1.5q2.708 0 4.604-1.896T16.5 10q0-2.708-1.896-4.604T10 3.5q-2.708 0-4.604 1.896T3.5 10q0 2.708 1.896 4.604T10 16.5Zm0-6.5Z'/%3E%3C/svg%3E");
+				}
+			}
+			.inf { // 单曲数，专辑数，MV 数 (歌手)
+				margin-top: 8px;
+				.item {
+					font-size: 0;
+					display: inline-flex;
+					align-items: center;
+					margin-right: 10px;
+				}
+				.item::before {
+					content: '';
+					display: inline-block;
+					background-color: var(--md-accent-color-secondary);
+					color: transparent;
+					width: 20px;
+					height: 20px;
+					font-size: 0;
+					-webkit-mask-repeat: no-repeat;
+					-webkit-mask-position: center;
+					margin-right: 5px;
+					opacity: .8;
+				}
+				.item::after {
+					content: var(--number);
+					color: rgba(var(--md-accent-color-secondary-rgb), .7);
+					font-size: 16px;
+					font-weight: bold;
+				}
+				.item:nth-child(1)::before {
+					-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='20' width='20'%3E%3Cpath d='M8.5 17q-1.25 0-2.125-.875T5.5 14q0-1.25.875-2.125T8.5 11q.417 0 .792.115.375.114.708.302V3h4.5v3h-3v8q0 1.25-.875 2.125T8.5 17Z'/%3E%3C/svg%3E");
+				}
+				.item:nth-child(2)::before {
+					-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='20' width='20'%3E%3Cpath d='M10 14q1.667 0 2.833-1.167Q14 11.667 14 10q0-1.667-1.167-2.833Q11.667 6 10 6 8.333 6 7.167 7.167 6 8.333 6 10q0 1.667 1.167 2.833Q8.333 14 10 14Zm0-3q-.417 0-.708-.292Q9 10.417 9 10t.292-.708Q9.583 9 10 9t.708.292Q11 9.583 11 10t-.292.708Q10.417 11 10 11Zm0 7q-1.646 0-3.104-.625-1.458-.625-2.552-1.719t-1.719-2.552Q2 11.646 2 10q0-1.667.625-3.115.625-1.447 1.719-2.541Q5.438 3.25 6.896 2.625T10 2q1.667 0 3.115.625 1.447.625 2.541 1.719 1.094 1.094 1.719 2.541Q18 8.333 18 10q0 1.646-.625 3.104-.625 1.458-1.719 2.552t-2.541 1.719Q11.667 18 10 18Zm0-1.5q2.708 0 4.604-1.896T16.5 10q0-2.708-1.896-4.604T10 3.5q-2.708 0-4.604 1.896T3.5 10q0 2.708 1.896 4.604T10 16.5Zm0-6.5Z'/%3E%3C/svg%3E");
+				}
+				.item:nth-child(3)::before {
+					-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='20' width='20'%3E%3Cpath d='m8 13.5 5.5-3.5L8 6.5ZM3.5 16q-.625 0-1.062-.438Q2 15.125 2 14.5v-9q0-.625.438-1.062Q2.875 4 3.5 4h13q.625 0 1.062.438Q18 4.875 18 5.5v9q0 .625-.438 1.062Q17.125 16 16.5 16Zm0-1.5h13v-9h-13v9Zm0 0v-9 9Z'/%3E%3C/svg%3E");
 				}
 			}
 			.intr {
@@ -1915,6 +1970,29 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			transform: none;
 			opacity: 1;
 		}		
+	}
+	// Components: loading
+	.u-load {
+		font-size: 18px;
+		color: rgba(var(--md-accent-color-secondary-rgb), 0.6);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		&::before {
+			margin-bottom: 25px;
+			width: 30px !important;
+			height: 30px !important;
+			opacity: .6;
+		}
+	}
+	.m-dlist .showpic .slide-loading,
+	.u-load::before {
+		-webkit-mask-size: contain;
+		-webkit-mask-repeat: no-repeat;
+		-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg width='24' height='24' stroke='%23000' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cstyle%3E.spinner_V8m1%7Btransform-origin:center;animation:spinner_zKoa 2s linear infinite%7D.spinner_V8m1 circle%7Bstroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite%7D@keyframes spinner_zKoa%7B100%25%7Btransform:rotate(360deg)%7D%7D@keyframes spinner_YpZS%7B0%25%7Bstroke-dasharray:0 150;stroke-dashoffset:0%7D47.5%25%7Bstroke-dasharray:42 150;stroke-dashoffset:-16%7D95%25,100%25%7Bstroke-dasharray:42 150;stroke-dashoffset:-59%7D%7D%3C/style%3E%3Cg class='spinner_V8m1'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3'%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");
+		background: var(--md-accent-color-secondary);
+		width: 24px;
+		height: 24px;
 	}
 
 	// Special fixes

@@ -406,6 +406,11 @@ plugin.onLoad(async (p) => {
 			for (let button of buttons) {
 				button.style.setProperty('--text', `'${button.innerText}'`);
 			}
+			// hide text 单曲数，专辑数，MV 数
+			const artistInfoItems = document.querySelectorAll('.g-mn .m-info .inf .item');
+			for (let item of artistInfoItems) {
+				item.style.setProperty('--number', `'${item.innerHTML.match(/(\d+)/)[1]}'`);
+			}
 			
 			// playlist title size recalculation
 			recalculateTitleSize();
