@@ -184,6 +184,44 @@ export const schemePresets = {
 		'bg': [19, 99, 119],
 		'bg-darken': [8, 74, 90]
 	},
+	'matrix': {
+		'primary': [0, 255, 65],
+		'bg': [6, 2, 8],
+		'bg-darken': [0, 22, 0]
+	},
+	'dracula-mint': {
+		'primary': [47, 222, 182],
+		'secondary': [226, 226, 228],
+		'bg': [41, 45, 62],
+		'bg-darken': [33, 36, 50],
+	},
+	'cerulean': {
+		'primary': [66, 141, 185],
+		'secondary': [33, 33, 33],
+		'bg': [243, 248, 251],
+		'bg-darken': [223, 238, 243],
+		'light': true
+	},
+	'discord': {
+		'primary': [88, 101, 242],
+		'secondary': [255, 255, 255],
+		'bg': [54, 57, 63],
+		'bg-darken': [47, 49, 54],
+	},
+	'wechat': {
+		'primary': [7, 193, 96],
+		'secondary': [34, 34, 34],
+		'bg': [245, 245, 245],
+		'bg-darken': [218, 218, 218],
+		'light': true
+	},
+	'tim': {
+		'primary': [29, 110, 255],
+		'secondary': [34, 34, 34],
+		'bg': [244, 246, 248],
+		'bg-darken': [255, 255, 255],
+		'light': true
+	},
 	'pure-black': {
 		'primary': [240, 240, 240],
 		'bg': [0, 0, 0],

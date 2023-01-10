@@ -2066,6 +2066,11 @@ body:not(.ignore-now-playing).refined-now-playing {
 				}
 				&::before {
 					background: transparent !important;
+					transform: scale(1.1);
+					transition: background-color .3s ease;
+				}
+				&:hover::before {
+					background: rgba(var(--md-accent-color-bg-darken-rgb), .15) !important;
 				}
 			}
 			.prg .download {

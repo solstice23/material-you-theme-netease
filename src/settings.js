@@ -15,7 +15,7 @@ class MDSettings extends React.Component {
 	componentDidMount() {
 		this.setState({
 			scheme: getSetting('scheme', 'dark-blue'),
-			ignoreNowPlaying: getSetting('ignore-now-playing', true)
+			ignoreNowPlaying: getSetting('ignore-now-playing', false)
 		});
 	}
 	setScheme(scheme) {
@@ -56,16 +56,16 @@ class MDSettings extends React.Component {
 					</div>
 					<div className="md-theme-setting-subtitle">其他设置</div>					
 					<div class="md-checkbox-wrapper">
-						<input id="md-ignore-now-playing" type="checkbox" className="md-checkbox" checked={ this.state.ignoreNowPlaying } onChange={ (e) => {
-							this.setState({ ignoreNowPlaying: e.target.checked });
+						<input id="md-ignore-now-playing-page" type="checkbox" className="md-checkbox" checked={ this.state.ignoreNowPlayingPage } onChange={ (e) => {
+							this.setState({ ignoreNowPlayingPage: e.target.checked });
 							if (e.target.checked) {
 								document.body.classList.add('ignore-now-playing');
 							} else {
 								document.body.classList.remove('ignore-now-playing');
 							}
-							setSetting('ignore-now-playing', e.target.checked);
+							setSetting('ignore-now-playing-page', e.target.checked);
 						}} />
-						<label for="md-ignore-now-playing" class="md-checkbox-label">在正在播放页面中不应用主题</label>
+						<label for="md-ignore-now-playing-page" class="md-checkbox-label">在正在播放页面中不应用主题</label>
 					</div>
 				</div>
 			</div>
