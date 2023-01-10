@@ -38,7 +38,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		border: none;
 		height: var(--bottombar-height);
 		background: var(--md-accent-color-bg);
-		transition: all 0s !important;
+		transition: transform 0.3s ease !important;
 	}
 	// Player: progress bar
 	.m-player .prg {
@@ -2008,6 +2008,75 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		}
 		.trbg {
 			height: 50px;
+		}
+	}
+}
+
+
+// NOW PLAYING
+
+body:not(.ignore-now-playing) {
+	&.mq-playing .m-pinfo .info {
+		transform: translateY(0);
+	}
+	.g-single {
+		bottom: var(--bottombar-height);
+	}
+}
+body:not(.ignore-now-playing).refined-now-playing {
+	&.mq-playing {
+		#main-player, .m-pinfo .btns > .btn, #main-player > .btnp, #time-indicator {
+			transition: transform .3s ease, opacity .3s ease;
+			will-change: transform, opacity;
+		}
+		#time-indicator {
+			transition: transform .3s ease, opacity .3s ease, right .3s ease;
+		}
+		&:not(:hover) {
+			#main-player, .m-pinfo .btns > .btn{
+				transform: translateY(calc(var(--bottombar-height) - 5px));
+			}
+			.m-pinfo .btns > .btn-love {
+				transform: translateY(0) !important;
+			}
+			#main-player > .btnp, #time-indicator {
+				transform: translateY(calc(-50% + 5px - var(--bottombar-height)));
+			}
+		}
+		&:not(.bottombar-hover) #time-indicator {
+			right: 25px !important;
+		}
+
+		#main-player, header .m-leftbox, .m-winctrl{
+			--md-accent-color: var(--rnp-accent-color-shade-1);
+			--md-accent-color-rgb: var(--rnp-accent-color-shade-1-rgb);
+			--md-accent-color-bg: var(--rnp-accent-color-shade-1);
+			--md-accent-color-bg-rgb: var(--rnp-accent-color-shade-1-rgb);
+			--md-accent-color-bg-darken: var(--rnp-accent-color-shade-2);
+			--md-accent-color-bg-darken-rgb: var(--rnp-accent-color-shade-2-rgb);
+			--md-accent-color-secondary: var(--rnp-accent-color-shade-1);
+			--md-accent-color-secondary-rgb: var(--rnp-accent-color-shade-1-rgb);
+		}
+
+		#main-player {
+			.btnp {
+				--md-accent-color-bg: var(--rnp-accent-color);
+				svg {
+					opacity: 1;
+				}
+				&::before {
+					background: transparent !important;
+				}
+			}
+			.prg .download {
+				opacity: .15;
+			}
+			.prg-spk {
+				transition: opacity .3s ease, background .3s ease, transform .3s ease;
+			}
+		}
+		.u-resize {
+			opacity: 0;
 		}
 	}
 }
