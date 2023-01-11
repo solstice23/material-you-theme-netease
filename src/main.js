@@ -84,7 +84,7 @@ export const applyScheme = (scheme) => {
 const initSettings = () => {	
 	applyScheme(getSetting('scheme', 'dark-blue'));
 
-	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing', true));
+	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing-page', true));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
 	
 	window.timeIndicator = getSetting('time-indicator', 'remain');
