@@ -2010,6 +2010,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			height: 50px;
 		}
 	}
+	.g-single .g-single-bd .bg {
+		background: transparent !important;
+	}
 }
 
 
