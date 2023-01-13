@@ -48,10 +48,8 @@ export const setSetting = (option, value) => {
 export const makeToast = (html, duration = 1000) => {
 	let noIntroAnimation = false;
 	if (document.querySelector('.md-toast')) {
-		console.log(document.querySelector('.md-toast'));
 		noIntroAnimation = true;
 		document.querySelector('.md-toast').remove();
-		console.log('remove');
 	}
 	const toast = document.createElement('div');
 	toast.classList.add('md-toast');

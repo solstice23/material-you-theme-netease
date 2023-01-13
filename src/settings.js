@@ -8,7 +8,14 @@ class MDSettings extends React.Component {
 		this.state = {
 			open: false,
 			scheme: 'dark-blue',
-			ignoreNowPlaying: true
+			ignoreNowPlaying: true,
+			customPreset: JSON.parse(getSetting('custom-scheme', JSON.stringify({
+				'primary': [189, 230, 251],
+				'secondary': [],
+				'bg': [30, 37, 41],
+				'bg-darken': [23, 29, 32],
+				'light': false
+			})))
 		};
 		this.setScheme = this.setScheme.bind(this);
 	}
@@ -53,7 +60,23 @@ class MDSettings extends React.Component {
 								);
 							})
 						}
+						<SchemeItem key="custom" scheme={ {name: 'custom', palette: this.state.customPreset} } active={ this.state.scheme === 'custom' } setScheme={ 
+							(scheme) => {
+								setSetting('custom-scheme', JSON.stringify(this.state.customPreset));
+								this.setScheme(scheme);
+							}
+						} />
 					</div>
+					{
+						this.state.scheme === 'custom' ? (
+							<CustomSchemeSetting scheme={ this.state.customPreset } setCustomPreset={ (preset) => {
+								this.setState({ customPreset: preset }, () => {	
+									setSetting('custom-scheme', JSON.stringify(this.state.customPreset));
+									applyScheme('custom');
+								});
+							}} />
+						) : null
+					}
 					<div className="md-theme-setting-subtitle">其他设置</div>					
 					<div class="md-checkbox-wrapper">
 						<input id="md-ignore-now-playing-page" type="checkbox" className="md-checkbox" checked={ this.state.ignoreNowPlayingPage } onChange={ (e) => {
@@ -160,6 +183,111 @@ class SchemePreview extends React.Component {
 		);
 	}
 }
+
+class CustomSchemeSetting extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			scheme: this.props.scheme
+		}
+	}
+	
+	updateScheme = () => {
+		let scheme = this.state.scheme;
+		this.props.setCustomPreset(scheme);
+	}
+	
+	setColor = (name, value) => {
+		this.setState({
+			scheme: {
+				...this.state.scheme,
+				[name]: value
+			}
+		}, () => {
+			this.updateScheme();
+		});
+	}
+	
+	render() {
+		return (
+			<div className="md-custom-scheme-setting">
+				<div className="md-theme-setting-subtitle">自定义</div>
+				<ColorField color={ this.state.scheme['primary'] } label="主色" defaultColor={[189, 230, 251]} setColor={ (value) => { this.setColor('primary', value); } } />
+				<ColorField color={ this.state.scheme['secondary'] } label="次色 (文字)" defaultColor={this.state.scheme['primary'] ?? [189, 230, 251]} setColor={ (value) => { this.setColor('secondary', value); } } optional={true} />
+				<ColorField color={ this.state.scheme['bg'] } label="背景" defaultColor={[30, 37, 41]} setColor={ (value) => { this.setColor('bg', value); } } />
+				<ColorField color={ this.state.scheme['bg-darken'] } label="背景 (暗化)" defaultColor={[23, 29, 32]} setColor={ (value) => { this.setColor('bg-darken', value); } } />
+				<div id="md-custom-scheme-light" class="md-checkbox-wrapper">
+					<input type="checkbox" className="md-checkbox" checked={ this.state.scheme.light } onChange={ (e) => {
+						this.setColor('light', e.target.checked);
+					}} />
+					<label for="md-custom-scheme-light" class="md-checkbox-label">亮色主题</label>
+				</div>
+			</div>
+		);
+	}
+}
+
+class ColorField extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			color: this.props.color ?? ['', '', ''],
+		}
+	}
+
+	componentDidUpdate( prevProps ) {
+		if (prevProps.defaultColor.toString() != this.props.defaultColor.toString() && this.state.color.filter((v) => v !== '').length !== 3) {
+			this.props.setColor(this.getCurrentColor());
+		}
+	}
+
+	getCurrentColor() {
+		if (this.state.color.filter((v) => v !== '').length === 3) {
+			return this.state.color;
+		} else {
+			return this.props.defaultColor;
+		}
+	}
+
+	render() {
+		return (
+			<div className="md-color-field">
+				<div className="md-color-field-color" style={{ backgroundColor: `rgb(${this.getCurrentColor().join(',')})` }}></div>
+				<div className="md-color-field-label">{ this.props.label }</div>
+				{
+					['R', 'G', 'B'].map((v, i) => {
+						return (
+							<div className="md-color-field-input-wrapper">
+								<input type="number" min="0" max="255" step="1" value={ this.state.color[i] ?? '' }
+									onInput={ (e) => {
+										const color = this.state.color;
+										if (e.target.value === '') {
+											color[i] = '';
+										} else {
+											color[i] = Math.min(255, Math.max(0, parseInt(e.target.value)));
+											e.target.value = color[i];
+										}
+										this.setState({ color }, () => {
+											this.props.setColor(this.getCurrentColor());
+										});
+									}}
+								/>
+								<div className="md-color-field-input-label">{ v }</div>
+							</div>
+						)
+					})
+				}
+				<button className="md-color-field-reset" onClick={ () => {
+					this.setState({ color: ['', '', ''] }, () => {
+						this.props.setColor(this.getCurrentColor());
+					});
+				} }><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z"/></svg></button>
+			</div>
+		);
+	}
+}
+
+
 
 export const initSettingMenu = () => {
 	const user = document.querySelector('header .m-tool .user');

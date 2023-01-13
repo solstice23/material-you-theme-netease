@@ -56,11 +56,15 @@ const overrideNCMCSS = (mutated) => {
 }
 
 export const applyScheme = (scheme) => {
-	if (!schemePresets[scheme]) {
-		scheme = 'dark-blue';
+	let preset;
+	if (scheme == 'custom') {
+		preset = JSON.parse(getSetting('custom-scheme', JSON.stringify(schemePresets['dark-blue'])));
+	} else {
+		if (!schemePresets[scheme]) {
+			scheme = 'dark-blue';
+		}
+		preset = schemePresets[scheme];
 	}
-
-	const preset = schemePresets[scheme];
 
 	preset['secondary'] ??= preset['primary'];
 
@@ -390,11 +394,11 @@ plugin.onLoad(async (p) => {
 	updateGreeting();
 	waitForElement('.g-mn', (dom) => {
 		new MutationObserver(() => {
-			initRecommendPlaylists();
+			try { initRecommendPlaylists();} catch (e) {}
 			removeRedundantPlaylists();
 		}).observe(dom, { childList: true, subtree: true });
 		window.initRecommendPlaylistsInterval = setInterval(() => {
-			initRecommendPlaylists();
+			try { initRecommendPlaylists();} catch (e) {}
 		}, 100);
 	});
 
