@@ -882,6 +882,10 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	ul.u-tab2 {
 		margin-left: 50px;
 	}
+	// Main
+	.g-mn {
+		margin-bottom: 15px;
+	}
 	// Main: Banner
 	.g-mn .p-recmd {
 		.m-banner {
@@ -2061,6 +2065,40 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		background: var(--md-accent-color-secondary);
 		width: 24px;
 		height: 24px;
+	}
+	// Components: pagination
+	.g-mn {
+		div.m-page {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			> a {
+				width: 36px;
+				height: 36px;
+				border: none;
+				border-radius: 30px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				transition: all .25s ease;
+				background-color: rgba(var(--md-accent-color-rgb), 0.053);
+				color: rgba(var(--md-accent-color-secondary-rgb), 0.9) !important;
+				&.js-selected {
+					background-color: rgba(var(--md-accent-color-rgb), 0.3);
+					font-weight: bold;
+					pointer-events: none;
+				}
+				&.js-disabled {
+					pointer-events: none;
+				}
+				&:hover {
+					background-color: rgba(var(--md-accent-color-rgb), 0.2);
+				}
+				svg {
+					fill: rgba(var(--md-accent-color-secondary-rgb), 0.9);
+				}
+			}
+		}
 	}
 
 	// Special fixes
