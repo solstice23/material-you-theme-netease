@@ -216,8 +216,8 @@ class CustomSchemeSetting extends React.Component {
 				<ColorField color={ this.state.scheme['secondary'] } label="次色 (文字)" defaultColor={this.state.scheme['primary'] ?? [189, 230, 251]} setColor={ (value) => { this.setColor('secondary', value); } } optional={true} />
 				<ColorField color={ this.state.scheme['bg'] } label="背景" defaultColor={[30, 37, 41]} setColor={ (value) => { this.setColor('bg', value); } } />
 				<ColorField color={ this.state.scheme['bg-darken'] } label="背景 (暗化)" defaultColor={[23, 29, 32]} setColor={ (value) => { this.setColor('bg-darken', value); } } />
-				<div id="md-custom-scheme-light" class="md-checkbox-wrapper">
-					<input type="checkbox" className="md-checkbox" checked={ this.state.scheme.light } onChange={ (e) => {
+				<div class="md-checkbox-wrapper">
+					<input id="md-custom-scheme-light" type="checkbox" className="md-checkbox" checked={ this.state.scheme.light } onChange={ (e) => {
 						this.setColor('light', e.target.checked);
 					}} />
 					<label for="md-custom-scheme-light" class="md-checkbox-label">亮色主题</label>
