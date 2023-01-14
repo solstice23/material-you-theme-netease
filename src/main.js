@@ -345,7 +345,7 @@ const scrollToCurrentPlaying = () => {
 		document.querySelector('.m-plylist ul').offsetTop -
 		(document.documentElement.clientHeight / 2) +
 		currentPlayingIndex * 50 + 100;
-	document.querySelector('.g-mn').scrollTo(0, currentPlayingOffset);
+	document.querySelector('.g-mn:not(.better-ncm-manager)').scrollTo(0, currentPlayingOffset);
 }
 
 
@@ -375,7 +375,7 @@ plugin.onLoad(async (p) => {
 			updateTimeIndicatorPosition();
 		});
 
-		new MutationObserver((mutations) => {
+		new MutationObserver(() => {
 			updateTimeIndicator();
 		}).observe(document.querySelector('time.now'), { childList: true });
 		new MutationObserver(() => {
@@ -385,6 +385,19 @@ plugin.onLoad(async (p) => {
 		new MutationObserver(() => {
 			updateTimeIndicatorPosition();
 		}).observe(document.querySelector('#main-player .speed'), { childList: true });
+
+		const queueNotifyToast = document.querySelector('#main-player .list .m-queuenotify');
+		new MutationObserver(() => {
+			const jumpToPlaylocationBtn = document.querySelector('button.u-playinglocation');
+			if (!jumpToPlaylocationBtn) {
+				return;
+			}
+			if (queueNotifyToast.classList.contains('f-dn')) {
+				jumpToPlaylocationBtn.classList.remove('pull-up');
+			} else {
+				jumpToPlaylocationBtn.classList.add('pull-up');
+			}
+		}).observe(queueNotifyToast, { attributes: true, attributeFilter: ['class'] });
 	});
 
 	// Greeting and two recomment playlists
