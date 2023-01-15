@@ -22,7 +22,7 @@ class MDSettings extends React.Component {
 	componentDidMount() {
 		this.setState({
 			scheme: getSetting('scheme', 'dark-blue'),
-			ignoreNowPlaying: getSetting('ignore-now-playing', false)
+			ignoreNowPlaying: getSetting('ignore-now-playing-page', false)
 		});
 	}
 	setScheme(scheme) {
