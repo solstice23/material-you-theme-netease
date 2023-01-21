@@ -1508,7 +1508,12 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			margin-left: 25px;
 			margin-top: 25px;
 			margin-bottom: 25px;
-			$item-height: 50px;
+			--item-height: 50px;
+			$item-height: var(--item-height, 50px);
+			&.list-with-covers {
+				--item-height: 70px;
+				--cover-size: 55px;
+			}
 			.head {
 				margin-left: 10px;
 				width: calc(100% - 20px);
@@ -1566,7 +1571,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					}
 					.td {
 						height: $item-height;
-						line-height: $item-height - 10px;
+						line-height: calc($item-height - 10px);
 						&.title {
 							font-size: 15px;
 							.tit {
@@ -1621,7 +1626,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				.ico { // icons
 					height: 20px;
 					width: 20px;
-					margin-top: $item-height * 0.5 - 20px * 0.5;
+					margin-top: calc($item-height * 0.5 - 20px * 0.5);
 					&[data-res-action='like'], &[data-res-action='unlike'] {
 						background-color: var(--md-accent-color);
 						-webkit-mask-repeat: no-repeat;
@@ -1691,6 +1696,55 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		}
 		.u-tab2 + * > .m-plylist {
 			margin-top: 0px;
+		}
+	}
+	// Main: podcast list
+	.m-tblist {
+		margin: 25px;
+		width: calc(100% - 50px);
+		box-sizing: content-box;
+		background: var(--md-accent-color-bg-darken);
+		border-radius: 16px;
+		overflow: hidden;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		.itm {
+			margin-left: 10px;
+			margin-right: 10px;
+			border-radius: 10px;
+			background: transparent !important;
+			font-size: 13px;
+			&:hover {
+				@include mixed-background-color-important(var(--md-accent-color-bg-darken-rgb), var(--md-accent-color-rgb), 0.06);
+			}
+			&.z-sel {
+				@include mixed-background-color-important(var(--md-accent-color-bg-darken-rgb), var(--md-accent-color-rgb), 0.1);
+			}
+		}
+		&.m-tblist-rdi-mul {
+			.itm {
+				.td {
+					&:nth-of-type(2) {
+						font-size: 16px;
+						color: rgba(var(--md-accent-color-secondary-rgb), 0.35);
+					}
+					&:nth-of-type(3) .s-fc1 {
+						font-size: 15px;
+						color: var(--md-accent-color-secondary);
+						padding-left: 10px;
+					}
+					.s-fc9 {
+						color: rgba(var(--md-accent-color-secondary-rgb), 0.6);
+					}
+				}
+			}
+		}
+		&:not(.m-tblist-rdi-mul) {
+			.itm .u-cover + h4 a {
+				font-size: 15px;
+				color: var(--md-accent-color-secondary);
+				padding-left: 10px;
+			}
 		}
 	}
 	// Main: daily recommendation & search buttons
@@ -2116,17 +2170,19 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 	// Components: msg bar (alert)
 	.u-msg {
-		margin-left: 20px;
-		margin-right: 20px;
+		margin-left: 25px;
+		margin-right: 25px;
 		margin-top: 10px;
 		padding: 10px;
 		background: rgba(var(--md-accent-color-rgb),0.15);
 		border-radius: 12px;
 		font-size: 16px;
-		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 10px;
+		&.z-show {
+			display: flex;
+		}
 		.cls {
 			margin-top: 0;
 			transform: translateY(-50%);
@@ -2142,6 +2198,15 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	.g-wrap .u-msg {
 		margin-left: 0;
 		margin-right: 0;
+	}
+	// Components: drag tip label
+	.u-dragtip {
+		font-size: 16px;
+		color: var(--md-accent-color-secondary);
+		padding: 8px 16px;
+		border-radius: 8px;
+		border: none;
+		background: var(--md-accent-color-bg-darken);
 	}
 
 	// Special fixes
