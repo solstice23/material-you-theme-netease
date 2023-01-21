@@ -2114,6 +2114,35 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			}
 		}
 	}
+	// Components: msg bar (alert)
+	.u-msg {
+		margin-left: 20px;
+		margin-right: 20px;
+		margin-top: 10px;
+		padding: 10px;
+		background: rgba(var(--md-accent-color-rgb),0.15);
+		border-radius: 12px;
+		font-size: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		.cls {
+			margin-top: 0;
+			transform: translateY(-50%);
+			svg {
+				fill: transparent !important;
+				background: rgba(var(--md-accent-color-secondary-rgb), 1);
+				-webkit-mask-position: center;
+				-webkit-mask-repeat: no-repeat;
+				-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 height=%2724%27 width=%2724%27%3E%3Cpath d=%27M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z%27/%3E%3C/svg%3E");
+			}
+		}
+	}
+	.g-wrap .u-msg {
+		margin-left: 0;
+		margin-right: 0;
+	}
 
 	// Special fixes
 	.m-plylist-lrc {

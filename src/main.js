@@ -466,6 +466,7 @@ plugin.onLoad(async (p) => {
 		listScrollVisibilityController.innerHTML = '';
 		document.head.appendChild(listScrollVisibilityController);
 		dom.addEventListener('scroll', () => {
+			console.log('scroll');
 			const listContainer = document.querySelector('.m-plylist-pl2 ul .lst');
 			if (!listContainer) {
 				listScrollVisibilityController.innerHTML = '';
