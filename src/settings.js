@@ -7,7 +7,7 @@ class MDSettings extends React.Component {
 		super(props);
 		this.state = {
 			open: false,
-			scheme: 'dark-blue',
+			scheme: 'dynamic-auto',
 			ignoreNowPlaying: true,
 			customPreset: JSON.parse(getSetting('custom-scheme', JSON.stringify({
 				'primary': [189, 230, 251],
@@ -21,7 +21,7 @@ class MDSettings extends React.Component {
 	}
 	componentDidMount() {
 		this.setState({
-			scheme: getSetting('scheme', 'dark-blue'),
+			scheme: getSetting('scheme', 'dynamic-auto'),
 			ignoreNowPlaying: getSetting('ignore-now-playing-page', false)
 		});
 	}
@@ -53,6 +53,30 @@ class MDSettings extends React.Component {
 					<div className="md-theme-setting-title">设置</div>
 					<div className="md-theme-setting-subtitle">Material You Theme</div>
 					<div className="md-scheme-list">
+						<div className="md-scheme-list-section-title">动态主题</div>
+						<div className="md-scheme-list-section-description">根据歌曲封面动态生成配色</div>
+						<SchemeItem
+							key="dynamic-dark"
+							scheme={ {name: 'dynamic-dark', palette: {}}}
+							active={ this.state.scheme === 'dynamic-dark' }
+							setScheme={ this.setScheme }
+						/>
+						<SchemeItem
+							key="dynamic-light"
+							scheme={ {name: 'dynamic-light', palette: {	}}}
+							active={ this.state.scheme === 'dynamic-light' }
+							setScheme={ this.setScheme }
+						/>
+						<SchemeItem
+							key="dynamic-auto"
+							scheme={ {name: 'dynamic-auto', palette: {}}}
+							active={ this.state.scheme === 'dynamic-auto' }
+							setScheme={ (scheme) => {
+								this.setScheme(scheme);
+								document.body.dispatchEvent(new CustomEvent('md-dynamic-theme-auto'));
+							}}
+						/>
+						<div className="md-scheme-list-section-title">普通主题</div>
 						{
 							this.props.list.map((item, index) => {
 								return (
@@ -60,6 +84,7 @@ class MDSettings extends React.Component {
 								);
 							})
 						}
+						<div className="md-scheme-list-section-title">自定义主题</div>
 						<SchemeItem key="custom" scheme={ {name: 'custom', palette: this.state.customPreset} } active={ this.state.scheme === 'custom' } setScheme={ 
 							(scheme) => {
 								setSetting('custom-scheme', JSON.stringify(this.state.customPreset));
@@ -103,7 +128,7 @@ class SchemeItem extends React.Component {
 	render() {
 		return (
 			<div className={`md-scheme-item ${this.props.active ? 'active' : ''}`}>
-				<SchemePreview scheme={ this.props.scheme.palette } setScheme= {() => { this.props.setScheme(this.props.scheme); }} />
+				<SchemePreview scheme={ this.props.scheme.palette } setScheme= {() => { this.props.setScheme(this.props.scheme); }} name={ this.props.scheme.name } />
 				<div className="md-scheme-item-name-container">
 					<span className="md-scheme-item-indicator"></span>
 					<span className="md-scheme-item-name">{ this.props.scheme.name.replace(/\-/g, ' ') }</span>
@@ -125,8 +150,7 @@ class SchemePreview extends React.Component {
 			if (name == 'light') {
 				continue;
 			}
-			
-
+			if (!this.props.scheme[name]) continue;
 			const [r, g, b] = this.props.scheme[name];
 			if (name == '' || name == 'primary') {
 				name = '--md-accent-color';
@@ -139,46 +163,54 @@ class SchemePreview extends React.Component {
 		return result;
 	}
 
+	inner = () => (
+		<div className="md-scheme-preview-inner">
+			<div className="md-bottombar"></div>
+			<div className="md-leftbar"></div>
+			<div className="md-btn-1"></div>
+			<div className="md-btn-2"></div>
+			<div className="md-btn-3"></div>
+			<div className="md-leftbar-content-1"></div>
+			<div className="md-leftbar-content-2"></div>
+			<div className="md-leftbar-content-3"></div>
+			<div className="md-leftbar-content-4"></div>
+			<div className="md-leftbar-content-5"></div>
+			<div className="md-leftbar-content-6"></div>
+			<div className="md-leftbar-content-7"></div>
+			<div className="md-main">
+				<div className="md-today-recommend-demo">
+					<div className="md-today-recommend-1"></div>
+					<div className="md-today-recommend-2"></div>
+					<div className="md-today-recommend-3"></div>
+				</div>
+				<div className="md-recommend-demo">
+					<div className="md-recommend-1"></div>
+					<div className="md-recommend-2"></div>
+					<div className="md-recommend-3"></div>
+					<div className="md-recommend-4"></div>
+					<div className="md-recommend-5"></div>
+					<div className="md-recommend-6"></div>
+					<div className="md-recommend-7"></div>
+					<div className="md-recommend-8"></div>
+					<div className="md-recommend-9"></div>
+					<div className="md-recommend-10"></div>
+				</div>
+			</div>
+		</div>
+	);
+
 	render() {
 		return (
 			<div className="md-scheme-preview"
+				scheme-name={ this.props.name }
 				style={ this.getAccentColorStyle() }
 				onClick={
 					() => {
 						this.props.setScheme();
 					}
 				}>
-				<div className="md-bottombar"></div>
-				<div className="md-leftbar"></div>
-				<div className="md-btn-1"></div>
-				<div className="md-btn-2"></div>
-				<div className="md-btn-3"></div>
-				<div className="md-leftbar-content-1"></div>
-				<div className="md-leftbar-content-2"></div>
-				<div className="md-leftbar-content-3"></div>
-				<div className="md-leftbar-content-4"></div>
-				<div className="md-leftbar-content-5"></div>
-				<div className="md-leftbar-content-6"></div>
-				<div className="md-leftbar-content-7"></div>
-				<div className="md-main">
-					<div className="md-today-recommend-demo">
-						<div className="md-today-recommend-1"></div>
-						<div className="md-today-recommend-2"></div>
-						<div className="md-today-recommend-3"></div>
-					</div>
-					<div className="md-recommend-demo">
-						<div className="md-recommend-1"></div>
-						<div className="md-recommend-2"></div>
-						<div className="md-recommend-3"></div>
-						<div className="md-recommend-4"></div>
-						<div className="md-recommend-5"></div>
-						<div className="md-recommend-6"></div>
-						<div className="md-recommend-7"></div>
-						<div className="md-recommend-8"></div>
-						<div className="md-recommend-9"></div>
-						<div className="md-recommend-10"></div>
-					</div>
-				</div>
+				{ this.inner() }
+				{ this.props.name == 'dynamic-auto' ? this.inner() : null }
 			</div>
 		);
 	}

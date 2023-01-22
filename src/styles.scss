@@ -1924,6 +1924,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	.u-ibtn1 {
 		background-color: rgba(var(--md-accent-color-rgb), .3);
 		border-color: rgba(var(--md-accent-color-rgb), .3);
+		color: var(--md-accent-color-secondary) !important;
 		border-radius: 12px !important;
 		transition: all .25s ease;
 		
@@ -2172,7 +2173,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		}
 	}
 	// Components: msg bar (alert)
-	.u-msg {
+	.u-msg, .m-timeline-head div[class*='sc-'] > a {
 		margin-left: 25px;
 		margin-right: 25px;
 		margin-top: 10px;
@@ -2201,6 +2202,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	.g-wrap .u-msg {
 		margin-left: 0;
 		margin-right: 0;
+	}
+	.m-timeline-head div[class*='sc-'] > a {
+		color: rgba(var(--md-accent-color-secondary-rgb), .9);
 	}
 	// Components: drag tip label
 	.u-dragtip {

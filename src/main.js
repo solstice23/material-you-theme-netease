@@ -1,14 +1,11 @@
 import './styles.scss';
-import { injectHTML, waitForElement, getSetting, setSetting, makeToast } from './utils.js';
+import './dynamic-theme.scss'
+import { injectHTML, waitForElement, getSetting, setSetting, makeToast, chunk } from './utils.js';
+import { argb2Rgb } from './color-utils.js';
 import { schemePresets } from './scheme-presets.js';
 import { initSettingMenu } from './settings.js';
+import { themeFromSourceColor, QuantizerCelebi, Hct, Score } from "@importantimport/material-color-utilities";
 
-let pluginPath;
-const loadFile = async (path) => {
-	let fullPath = pluginPath + '/' + path;
-	fullPath = fullPath.replace(/\\/g, '/');
-    return await betterncm.fs.readFileText(fullPath);
-}
 
 const addOrRemoveGlobalClassByOption = (className, optionValue) => {
 	if (optionValue) {
@@ -56,6 +53,21 @@ const overrideNCMCSS = (mutated) => {
 }
 
 export const applyScheme = (scheme) => {
+	if (scheme.startsWith('dynamic')) {
+		document.body.classList.add('md-dynamic-theme');
+		document.body.classList.remove('md-dynamic-theme-light', 'md-dynamic-theme-dark', 'md-dynamic-theme-auto');
+		const mode = scheme.split('-').slice(-1)[0];
+		document.body.classList.add(`md-dynamic-theme-${mode}`);
+		if (mode != 'auto') {
+			window.mdThemeType = mode;
+			overrideNCMCSS('pri-skin-gride');
+			overrideNCMCSS('skin_default');
+		}
+		return;
+	} else {
+		document.body.classList.remove('md-dynamic-theme');
+	}
+
 	let preset;
 	if (scheme == 'custom') {
 		preset = JSON.parse(getSetting('custom-scheme', JSON.stringify(schemePresets['dark-blue'])));
@@ -86,7 +98,7 @@ export const applyScheme = (scheme) => {
 }
 
 const initSettings = () => {	
-	applyScheme(getSetting('scheme', 'dark-blue'));
+	applyScheme(getSetting('scheme', 'dynamic-auto'));
 
 	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing-page', true));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
@@ -350,9 +362,68 @@ const scrollToCurrentPlaying = () => {
 }
 
 
-plugin.onLoad(async (p) => {
-	pluginPath = p.pluginPath;
 
+const dynamicColorController = document.createElement('style');
+dynamicColorController.innerHTML = `
+	:root {
+		--md-dynamic-light-primary: rgb(103, 80, 164);
+		--md-dynamic-light-primary-rgb: 103, 80, 164;
+		--md-dynamic-light-secondary: rgb(98, 91, 113);
+		--md-dynamic-light-secondary-rgb: 98, 91, 113;
+		--md-dynamic-light-bg: rgb(244, 239, 244);
+		--md-dynamic-light-bg-rgb: 244, 239, 244;
+		--md-dynamic-light-bg-darken: rgb(251, 246, 251);
+		--md-dynamic-light-bg-darken-rgb: 251, 246, 251;
+
+		--md-dynamic-dark-primary: rgb(208, 188, 255);
+		--md-dynamic-dark-primary-rgb: 208, 188, 255;
+		--md-dynamic-dark-secondary: rgb(204, 194, 220);
+		--md-dynamic-dark-secondary-rgb: 204, 194, 220;
+		--md-dynamic-dark-bg: rgb(49, 48, 51);
+		--md-dynamic-dark-bg-rgb: 49, 48, 51;
+		--md-dynamic-dark-bg-darken: rgb(38, 37, 40);
+		--md-dynamic-dark-bg-darken-rgb: 38, 37, 40;		
+	}
+`;
+document.head.appendChild(dynamicColorController);
+const updateDynamicColor = () => {
+	const dom = document.querySelector(".m-pinfo .j-cover");
+	if (!dom) return;
+
+	const canvas = document.createElement('canvas');
+	canvas.width = dom.naturalWidth;
+	canvas.height = dom.naturalHeight;
+	const ctx = canvas.getContext('2d');
+	ctx.drawImage(dom, 0, 0);
+	const pixels = chunk(ctx.getImageData(0, 0, dom.naturalWidth, dom.naturalHeight).data, 4).map((pixel) => {
+		return ((pixel[3] << 24 >>> 0) | (pixel[0] << 16 >>> 0) | (pixel[1] << 8 >>> 0) | pixel[2]) >>> 0;
+	});
+
+	const quantizedColors = QuantizerCelebi.quantize(pixels, 128);
+	const ranked = Score.score(quantizedColors);
+	const top = ranked[0];
+
+	const theme = themeFromSourceColor(top);
+
+	theme.schemes.light.bgDarken = (Hct.from(theme.palettes.neutral.hue, theme.palettes.neutral.chroma, 97.5)).toInt();
+	theme.schemes.dark.bgDarken = (Hct.from(theme.palettes.neutral.hue, theme.palettes.neutral.chroma, 15)).toInt();
+
+	let newCSSItems = '';
+	const updateColor = (scheme, key, name) => {
+		const [r, g, b] = [...argb2Rgb(theme.schemes[scheme][key])]
+		newCSSItems += `--md-dynamic-${scheme}-${name}: rgb(${r}, ${g}, ${b});`
+		newCSSItems += `--md-dynamic-${scheme}-${name}-rgb: ${r}, ${g}, ${b};`
+	}
+	for (let scheme of ['light', 'dark']) {
+		updateColor(scheme, 'primary', 'primary');
+		updateColor(scheme, 'secondary', 'secondary');
+		updateColor(scheme, 'inverseOnSurface', 'bg');
+		updateColor(scheme, 'bgDarken', 'bg-darken');
+	}
+	dynamicColorController.innerHTML = `:root {${newCSSItems}}`;
+}
+
+plugin.onLoad(async (p) => {
 	initSettings();
 
 	// Alternative time indicator
@@ -502,6 +573,43 @@ plugin.onLoad(async (p) => {
 		}).observe(dom, { attributes: true, attributeFilter: ['style'] });
 		toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width || 199) - 199}px`);
 	});
+	
+	// Dynamic scheme color
+	waitForElement('.m-pinfo', (dom) => {
+		let oldSrc = '';
+		const update = () => {
+			const img = dom.querySelector('.j-cover');
+			if (oldSrc == img.src) return;
+			if (img.complete) {
+				oldSrc = img.src;
+				updateDynamicColor();
+			} else {
+				img.addEventListener('load', () => {
+					update();
+				});
+			}
+		};
+		new MutationObserver(() => {
+			update();
+		}).observe(dom, { childList: true, subtree: true });
+		update();
+	});
+
+	// Listen system theme change
+	const toggleSystemDarkmodeClass = (media) => {
+		document.body.classList.add(media.matches ? 'md-dark' : 'md-light');
+		document.body.classList.remove(media.matches ? 'md-light' : 'md-dark');
+		if (document.body.classList.contains('md-dynamic-theme-auto')) {
+			window.mdThemeType = media.matches ? 'dark' : 'light';
+			console.log('mdThemeType', window.mdThemeType);
+			overrideNCMCSS('pri-skin-gride');
+			overrideNCMCSS('skin_default');
+		}
+	};
+	const systemDarkmodeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+	systemDarkmodeMedia.addEventListener('change', () => { toggleSystemDarkmodeClass(systemDarkmodeMedia); });
+	document.body.addEventListener('md-dynamic-theme-auto', () => {	toggleSystemDarkmodeClass(systemDarkmodeMedia); });
+	toggleSystemDarkmodeClass(systemDarkmodeMedia);
 });
 
 plugin.onConfig((tools) => {

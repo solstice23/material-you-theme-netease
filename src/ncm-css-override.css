@@ -126,3 +126,9 @@
 div.m-layer .lyct, div.m-layer, div.m-layer .zcnt {
     background: var(--md-accent-color-bg);
 }
+
+#m-migrating-follow-new-song-root span,
+#m-migrating-follow-new-song-root span > a,
+#m-migrating-follow-new-song-root .tit {
+    color: rgba(var(--md-accent-color-secondary-rgb), .9) !important;
+}

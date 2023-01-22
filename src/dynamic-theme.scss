@@ -1,0 +1,26 @@
+body.md-dynamic-theme {
+	&.md-dynamic-theme-light, &.md-dynamic-theme-auto.md-light {
+		--md-accent-color: var(--md-dynamic-light-primary) !important;
+		--md-accent-color-rgb: var(--md-dynamic-light-primary-rgb) !important;
+		--md-accent-color-secondary: var(--md-dynamic-light-secondary) !important;
+		--md-accent-color-secondary-rgb: var(--md-dynamic-light-secondary-rgb) !important;
+		--md-accent-color-bg: var(--md-dynamic-light-bg) !important;
+		--md-accent-color-bg-rgb: var(--md-dynamic-light-bg-rgb) !important;
+		--md-accent-color-bg-darken: var(--md-dynamic-light-bg-darken) !important;
+		--md-accent-color-bg-darken-rgb: var(--md-dynamic-light-bg-darken-rgb) !important;
+		--md-accent-color-grey-base: rgb(0, 0, 0) !important;
+		--md-accent-color-grey-base-rgb: 0, 0, 0 !important;
+	}
+	&.md-dynamic-theme-dark, &.md-dynamic-theme-auto.md-dark {
+		--md-accent-color: var(--md-dynamic-dark-primary) !important;
+		--md-accent-color-rgb: var(--md-dynamic-dark-primary-rgb) !important;
+		--md-accent-color-secondary: var(--md-dynamic-dark-secondary) !important;
+		--md-accent-color-secondary-rgb: var(--md-dynamic-dark-secondary-rgb) !important;
+		--md-accent-color-bg: var(--md-dynamic-dark-bg) !important;
+		--md-accent-color-bg-rgb: var(--md-dynamic-dark-bg-rgb) !important;
+		--md-accent-color-bg-darken: var(--md-dynamic-dark-bg-darken) !important;
+		--md-accent-color-bg-darken-rgb: var(--md-dynamic-dark-bg-darken-rgb) !important;
+		--md-accent-color-grey-base: rgb(255, 255, 255) !important;
+		--md-accent-color-grey-base-rgb: 255, 255, 255 !important;
+	}
+}
