@@ -1550,7 +1550,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				border-radius: 16px;
 				padding-top: 10px;
 				padding-bottom: 10px;
-				.lst {
+				.lst.mdtheme-scroll-management { // override ncm's scroll overflow management
 					padding: 0;
 					> .pl-di {
 						display: block;

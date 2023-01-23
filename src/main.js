@@ -537,7 +537,7 @@ plugin.onLoad(async (p) => {
 		const listScrollVisibilityController = document.createElement('style');
 		listScrollVisibilityController.innerHTML = '';
 		document.head.appendChild(listScrollVisibilityController);
-		dom.addEventListener('scroll', () => {
+		const recalc = () => {
 			const listContainer = document.querySelector('.m-plylist-pl2 ul .lst');
 			if (!listContainer) {
 				listScrollVisibilityController.innerHTML = '';
@@ -562,7 +562,10 @@ plugin.onLoad(async (p) => {
 			if (listScrollVisibilityController.innerHTML != css) {
 				listScrollVisibilityController.innerHTML = css;
 			}
-		}, { passive: true });
+			listContainer.classList.add('mdtheme-scroll-management');
+		};
+		dom.addEventListener('scroll', recalc , { passive: true });
+		document.addEventListener('resize', recalc);
 	});
 
 	// Fix toolbar button offset
@@ -601,7 +604,6 @@ plugin.onLoad(async (p) => {
 		document.body.classList.remove(media.matches ? 'md-light' : 'md-dark');
 		if (document.body.classList.contains('md-dynamic-theme-auto')) {
 			window.mdThemeType = media.matches ? 'dark' : 'light';
-			console.log('mdThemeType', window.mdThemeType);
 			overrideNCMCSS('pri-skin-gride');
 			overrideNCMCSS('skin_default');
 		}
