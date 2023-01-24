@@ -261,12 +261,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				background-color: rgba(var(--md-accent-color-rgb), 1);
 				-webkit-mask-repeat: no-repeat;
 				-webkit-mask-position: center;
-				fill: none;
-			}
-			&:hover {
-				svg {
-					fill: var(--md-accent-color);
-				}
+				fill: none !important;
 			}
 		}
 		.audioEffect svg {
@@ -2238,7 +2233,7 @@ body:not(.ignore-now-playing) {
 		transform: translateY(0);
 	}
 	.g-single {
-		bottom: var(--bottombar-height);
+		bottom: calc(var(--bottombar-height) - 2px);
 	}
 }
 body:not(.ignore-now-playing).refined-now-playing {
