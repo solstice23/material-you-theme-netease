@@ -97,10 +97,10 @@ export const applyScheme = (scheme) => {
 	overrideNCMCSS('skin_default');
 }
 
-const initSettings = () => {	
+const initSettings = () => {
 	applyScheme(getSetting('scheme', 'dynamic-auto'));
 
-	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing-page', true));
+	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing-page', false));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
 	
 	window.timeIndicator = getSetting('time-indicator', 'remain');
@@ -391,11 +391,11 @@ const updateDynamicColor = () => {
 	if (!dom) return;
 
 	const canvas = document.createElement('canvas');
-	canvas.width = dom.naturalWidth;
-	canvas.height = dom.naturalHeight;
+	canvas.width = 48;
+	canvas.height = 48;
 	const ctx = canvas.getContext('2d');
-	ctx.drawImage(dom, 0, 0);
-	const pixels = chunk(ctx.getImageData(0, 0, dom.naturalWidth, dom.naturalHeight).data, 4).map((pixel) => {
+	ctx.drawImage(dom, 0, 0, 48, 48);
+	const pixels = chunk(ctx.getImageData(0, 0, 48, 48).data, 4).map((pixel) => {
 		return ((pixel[3] << 24 >>> 0) | (pixel[0] << 16 >>> 0) | (pixel[1] << 8 >>> 0) | pixel[2]) >>> 0;
 	});
 
