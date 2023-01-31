@@ -2260,7 +2260,13 @@ body:not(.ignore-now-playing).refined-now-playing {
 			right: 25px !important;
 		}
 
-		#main-player, header .m-leftbox, .m-winctrl{
+		#main-player > *:not(.brt):not(.speed),
+		#main-player > *:not(.brt):not(.speed) *
+		#main-player > .brt > span,
+		#main-player > .speed > span,
+		header .m-leftbox .m-topbox,
+		header .m-leftbox .m-tool > * > svg,
+		.m-winctrl{
 			--md-accent-color: var(--rnp-accent-color-shade-1);
 			--md-accent-color-rgb: var(--rnp-accent-color-shade-1-rgb);
 			--md-accent-color-bg: var(--rnp-accent-color-shade-1);
