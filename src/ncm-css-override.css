@@ -132,3 +132,23 @@ div.m-layer .lyct, div.m-layer, div.m-layer .zcnt {
 #m-migrating-follow-new-song-root .tit {
     color: rgba(var(--md-accent-color-secondary-rgb), .9) !important;
 }
+div.m-layer {
+    color: rgba(var(--md-accent-color-grey-base-rgb), 0.8);
+}
+div.m-layer .zbar .zttl {
+    color: rgba(var(--md-accent-color-grey-base-rgb), 0.8);
+}
+.s-fc3 {
+    color: rgba(var(--md-accent-color-grey-base-rgb), 0.45);
+}
+
+.u-txt, .u-txt textarea {
+    color: rgba(var(--md-accent-color-grey-base-rgb), 0.8);
+}
+.u-txt {
+    background: rgba(var(--md-accent-color-grey-base-rgb), 0.07) padding-box;
+    border: 1px solid rgba(var(--md-accent-color-grey-base-rgb), 0.12);
+}
+.u-cklist input[type=checkbox] + span, .u-cklist input[type=radio] + span {
+    border-color: rgba(var(--md-accent-color-grey-base-rgb), 0.2);
+}
