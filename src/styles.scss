@@ -510,7 +510,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 
 		// tabs
 		ul li a {
-			color: rgba(var(--md-accent-color-secondary-rgb), 0.9) !important;
+			color: rgba(var(--md-accent-color-secondary-rgb), 0.9)/* !important*/;
 			border-radius: 100px !important;
 			margin-left: 5px !important;
 			padding-left: 35px;
@@ -524,7 +524,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			&:hover {
 				background: rgba(var(--md-accent-color-secondary-rgb), 0.05);
 			}
-			&::before {
+			&::after {
 				content: '';
 				position: absolute;
 				left: 0;
@@ -543,7 +543,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		}
 		ul li.z-sel a {
 			font-weight: bold;
-			&::before {
+			&::after {
 				opacity: 1;
 				transform: scaleX(1);
 			}
@@ -555,7 +555,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			left: 12px;
 		}
 		ul.my li a {
-			color: rgba(var(--md-accent-color-secondary-rgb), 0.8) !important;
+			color: rgba(var(--md-accent-color-secondary-rgb), 0.8)/* !important*/;
 			svg{
 				fill: rgba(var(--md-accent-color-secondary-rgb), 0.8);
 			}
@@ -1677,6 +1677,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 						width: 28px;
 					}
 				}
+				.rnk {
+					margin: calc(var(--item-height) / 2 - 7px) 0 0 0;
+				}
 				&.m-plylist {
 					margin-left: -30px;
 					width: 100%;
@@ -1916,7 +1919,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 
 	// Components: button
-	.u-ibtn1 {
+	.u-ibtn1, .ply.s-fc1 {
 		background-color: rgba(var(--md-accent-color-rgb), .3);
 		border-color: rgba(var(--md-accent-color-rgb), .3);
 		color: var(--md-accent-color-secondary) !important;
@@ -2304,3 +2307,105 @@ body:not(.ignore-now-playing).refined-now-playing {
 		}
 	}
 }
+
+
+// SIDEBAR FOLDING
+
+/*
+.g-mn {
+    left: var(--sidebar-width, 199px) !important;
+}
+body.sidebar-folded {
+		.g-mn {
+			transition: all 0.1s;
+			position: absolute;
+			left: 62px !important;
+			right: 0;
+		} 
+	#x-g-mn {
+		.g-sd {
+			overflow: hidden !important;
+			transition: width 0.3s;
+			width: 62px !important;
+		}
+		.g-sd h2 {
+			transition: opacity 0.3s ease;
+			position: relative;
+			width: calc(var(--sidebar-width) - 10px);
+			transition: color 0.3s ease;
+		}
+		.g-sd:not(:hover) h2 {
+			color: transparent;
+		}
+		.g-sd h2::before {
+			content: '';
+			display: block;
+			position: absolute;
+			left: 22px;
+			top: 36%;
+			width: 26px;
+			height: 1px;
+			background: var(--md-accent-color-secondary);
+			transition: opacity 0.3s ease;
+			opacity: 0;
+			pointer-events: none;
+		}
+		.g-sd:not(:hover) h2::before {
+			opacity: 0.3;
+		}
+		.g-sd .newlist,
+		.g-sd .heartbeat.f-cp {
+			transition: opacity 0.3s;
+		}
+		.g-sd a {
+			transition: background-color 0.2s ease, padding-left 0.3s, transform 0.3s !important;
+			&::after {
+				max-width: var(--sidebar-width, 199px);
+				transition: max-width .3s ease, transform .2s ease-out, opacity .2s ease-out;
+				will-change: max-width, transform, opacity;
+			}
+		}
+		.g-sd li a {
+			text-overflow: clip;
+		}
+		.g-sd:not(:hover) li a {
+			text-overflow: clip;
+			&::after {
+				max-width: 40px;
+			}
+		}
+		.g-sd:not(:hover) li.z-sel a {
+			background-color: transparent !important;
+		}
+		
+		.g-sd li.z-sel {
+			transition: width 0.3s;
+			width: calc(200px - 10px);
+		}
+		.g-sd:not(:hover) ul a {
+			padding-left: 62px !important;
+			transform: translateX(5px);
+		}
+		.g-sd:not(:hover) li.z-sel {
+			width: 100px;
+			//-webkit-mask-image: linear-gradient(90deg, black 30%, transparent 44%, transparent 99%);
+		}
+		.g-sd:not(:hover) ul.sys.firstlist a {
+			//-webkit-mask-image: linear-gradient(90deg, black, transparent);
+		}
+		.g-sd:not(:hover) .newlist,
+		.g-sd:not(:hover) .heartbeat.f-cp {
+			opacity: 0;
+		}
+		.g-sd:hover {
+			width: var(--sidebar-width) !important;
+		}
+		.g-sd:hover .heartbeat.f-cp,
+		.g-sd:hover .newlist {
+			opacity: 1;
+		}
+		.g-sd:hover a {
+			font-size: auto;
+		}
+	}
+}*/

@@ -572,8 +572,10 @@ plugin.onLoad(async (p) => {
 	waitForElement('.g-sd', (dom) => {
 		const toolbarLeftPart = document.querySelector('header.g-hd .m-leftbox');
 		new MutationObserver(() => {
+			document.body.style.setProperty('--sidebar-width', `${parseInt(dom.style?.width || 199)}px`);
 			toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width || 199) - 199}px`);
 		}).observe(dom, { attributes: true, attributeFilter: ['style'] });
+		document.body.style.setProperty('--sidebar-width', `${parseInt(dom.style?.width || 199)}px`);
 		toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width || 199) - 199}px`);
 	});
 	
