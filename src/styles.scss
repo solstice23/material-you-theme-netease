@@ -902,13 +902,13 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			display: flex;
 			align-items: center;
 			background: rgba(var(--md-accent-color-rgb), 0.12);
-			border-radius: 8px;
+			border-radius: 16px;
 			transition: all .3s ease;
 			cursor: pointer;
 			position: relative;
 			&:hover {
 				background: rgba(var(--md-accent-color-rgb), 0.22);
-				border-radius: 16px;
+				border-radius: 8px;
 			}
 			.cvr {
 				transition: all .3s ease;
@@ -993,13 +993,13 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			li {
 				width: 100%;
 				background: var(--md-accent-color-bg-darken);
-				border-radius: 10px;
+				border-radius: 16px;
 				padding: 16px;
 				position: relative;
 				overflow: hidden;
 				transition: all .3s ease;
 				&:hover {
-					border-radius: 16px;
+					border-radius: 8px;
 					background: rgba(var(--md-accent-color-rgb), 0.1);
 				}
 				.desc {
