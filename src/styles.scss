@@ -2057,6 +2057,10 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				opacity: 1;
 			}
 		}
+		&.m-card-arrow-top { transform-origin: bottom; }
+		&.m-card-arrow-right { transform-origin: left; }
+		&.m-card-arrow-bottom { transform-origin: top; }
+		&.m-card-arrow-left { transform-origin: right; }
 	}
 	// Components: checkbox
 	.u-cklist input[type=checkbox]:checked + span svg {
