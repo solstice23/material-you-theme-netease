@@ -426,6 +426,8 @@ const updateDynamicColor = () => {
 plugin.onLoad(async (p) => {
 	initSettings();
 
+	document.body.classList.add('material-you-theme');
+
 	// Alternative time indicator
 	waitForElement('#main-player', (dom) => {
 		injectHTML('div', `

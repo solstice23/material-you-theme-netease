@@ -2336,35 +2336,14 @@ body:not(.ignore-now-playing) {
 }
 body:not(.ignore-now-playing).refined-now-playing {
 	&.mq-playing {
-		#main-player, .m-pinfo .btns > .btn, #main-player > .btnp, #time-indicator {
-			transition: transform .3s ease, opacity .3s ease;
-			will-change: transform, opacity;
-		}
-		#time-indicator {
-			transition: transform .3s ease, opacity .3s ease, right .3s ease;
-		}
-		&:not(:hover):not(.mq-playing-scroll) {
-			#main-player, .m-pinfo .btns > .btn{
-				transform: translateY(calc(var(--bottombar-height) - 5px));
-			}
-			.m-pinfo .btns > .btn-love {
-				transform: translateY(0) !important;
-			}
-			#main-player > .btnp, #time-indicator {
-				transform: translateY(calc(-50% + 5px - var(--bottombar-height)));
-			}
-		}
-		&:not(.bottombar-hover):not(.mq-playing-scroll) #time-indicator {
-			right: 25px !important;
-		}
-
 		#main-player > *:not(.brt):not(.speed),
 		#main-player > *:not(.brt):not(.speed) *
 		#main-player > .brt > span,
 		#main-player > .speed > span,
 		header .m-leftbox .m-topbox,
 		header .m-leftbox .m-tool > * > svg,
-		.m-winctrl{
+		#md-theme-setting-btn,
+		.m-winctrl {
 			--md-accent-color: var(--rnp-accent-color-shade-1);
 			--md-accent-color-rgb: var(--rnp-accent-color-shade-1-rgb);
 			--md-accent-color-bg: var(--rnp-accent-color-shade-1);
