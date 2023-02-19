@@ -878,7 +878,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		justify-content: center;
 		background-color: transparent !important;
 	}
-	.m-tab, .u-tab2 > ul:not(.u-stab), ul.u-tab2 {
+	.m-tab, .u-tab2 > ul:not(.u-stab), ul.u-tab2, .md-list-view-switcher {
 		border-radius: 200px;
 		background-color: rgba(var(--md-accent-color-rgb), 0.053);
 		width: max-content;
@@ -886,7 +886,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		margin-top: 10px;
 		margin-bottom: 10px;
 		padding: 0;
-		> li {
+		> li, .md-list-view-button {
 			border-radius: 200px;
 			height: 100%;
 			transition: background-color .2s ease;
@@ -910,7 +910,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					color: rgba(var(--md-accent-color-secondary-rgb), 0.9) !important;
 				}
 			}
-			a::before {
+			a::before, &.md-list-view-button::before {
 				content: '';
 				position: absolute;
 				left: 0;
@@ -926,7 +926,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				background: rgba(var(--md-accent-color-rgb), 0.12);
 				z-index: -1;
 			}
-			&.z-selected a::before , a.z-sel::before {
+			&.z-selected a::before, a.z-sel::before, &.md-list-view-button.active::before {
 				opacity: 1;
 				transform: scaleX(1);
 			}
@@ -1576,10 +1576,6 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			margin-bottom: 25px;
 			--item-height: 50px;
 			$item-height: var(--item-height, 50px);
-			&.list-with-covers {
-				--item-height: 70px;
-				--cover-size: 55px;
-			}
 			.head {
 				margin-left: 10px;
 				width: calc(100% - 20px);

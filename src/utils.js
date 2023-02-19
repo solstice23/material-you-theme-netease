@@ -13,7 +13,19 @@ export const injectHTML = (type, html, parent, fun = (dom) => {}) => {
 }
 export const waitForElement = (selector, fun) => {
 	selector = selector.split(',');
-	let interval = setInterval(() => {		
+	let done = true;
+	for (const s of selector) {
+		if (!document.querySelector(s)) {
+			done = false;
+		}
+	}
+	if (done) {
+		for (const s of selector) {
+			fun.call(this, document.querySelector(s));
+		}
+		return;
+	}
+	let interval = setInterval(() => {
 		let done = true;
 		for (const s of selector) {
 			if (!document.querySelector(s)) {
@@ -27,6 +39,12 @@ export const waitForElement = (selector, fun) => {
 			}
 		}
 	}, 100);
+}
+export const waitForElementAsync = async (selector) => {
+	if (document.querySelector(selector)) {
+		return document.querySelector(selector);
+	}
+	return await betterncm.utils.waitForElement(selector);
 }
 export const getSetting = (option, defaultValue = '') => {
 	option = "material-you-theme-" + option;

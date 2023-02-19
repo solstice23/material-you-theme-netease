@@ -1,10 +1,11 @@
 import './styles.scss';
 import './dynamic-theme.scss'
-import { injectHTML, waitForElement, getSetting, setSetting, makeToast, chunk } from './utils.js';
+import { injectHTML, waitForElement, waitForElementAsync, getSetting, setSetting, makeToast, chunk } from './utils.js';
 import { argb2Rgb } from './color-utils.js';
 import { schemePresets } from './scheme-presets.js';
 import { initSettingMenu } from './settings.js';
-import { themeFromSourceColor, QuantizerCelebi, Hct, Score, DynamicScheme, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "../material-color-utilities/typescript/dist";
+import { themeFromSourceColor, QuantizerCelebi, Hct, Score, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "../material-color-utilities/typescript/dist";
+import { ListViewSwitcher } from './list-view-switcher.js';
 
 const migrateSettings = () => {
 	if (getSetting('scheme') == 'dynamic-auto') {
@@ -656,11 +657,11 @@ plugin.onLoad(async (p) => {
 		const update = () => {
 			const img = dom.querySelector('.j-cover');
 			if (oldSrc == img?.src) return;
-			if (img.complete) {
+			if (img?.complete) {
 				oldSrc = img.src;
 				updateDynamicColor();
 			} else {
-				img.addEventListener('load', () => {
+				img?.addEventListener('load', () => {
 					update();
 				});
 			}
@@ -669,6 +670,27 @@ plugin.onLoad(async (p) => {
 			update();
 		}).observe(dom, { childList: true, subtree: true });
 		update();
+	});
+
+	// Add list view switcher
+	window.addEventListener('hashchange', async () => {
+		let targetContainer = null;
+		if (window.location.hash.includes('m/playlist')) {
+			targetContainer = await waitForElementAsync('.g-mn .u-tab2 .m-lstoper');
+		} else if (window.location.hash.includes('m/dailysong')) {
+			targetContainer = await waitForElementAsync('.g-mn .m-plylist .hd');
+		}
+		if (!targetContainer) {
+			return;
+		}
+		if (targetContainer.classList.contains('md-list-switcher-patched')) {
+			return;
+		}
+		targetContainer.classList.add('md-list-switcher-patched');
+		const switcher = document.createElement('div');
+		switcher.classList.add('md-list-view-switcher');
+		ReactDOM.render(<ListViewSwitcher />, switcher);
+		targetContainer.appendChild(switcher);
 	});
 
 	// Listen system theme change
