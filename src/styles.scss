@@ -394,6 +394,12 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					fill: rgba(var(--md-accent-color-secondary-rgb), 1);
 					stroke: rgba(var(--md-accent-color-secondary-rgb), 1);
 				}
+				&[href*='m/fm'] .max {
+					transform: scale(0.8) rotate(45deg);
+				}
+				.min {
+					display: none;
+				}
 			}
 		}
 		// love and praise button

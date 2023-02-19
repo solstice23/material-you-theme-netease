@@ -1,6 +1,6 @@
 import { getSetting, setSetting } from "./utils";
 import { schemePresets } from "./scheme-presets";
-import { applyScheme } from "./main";
+import { applyScheme, getThemeCSSFromColor } from "./main";
 import './settings.scss';
 class MDSettings extends React.Component {
 	constructor(props) {
@@ -21,7 +21,7 @@ class MDSettings extends React.Component {
 	}
 	componentDidMount() {
 		this.setState({
-			scheme: getSetting('scheme', 'dynamic-auto'),
+			scheme: getSetting('scheme', 'dynamic-default-auto'),
 			ignoreNowPlaying: getSetting('ignore-now-playing-page', false)
 		});
 	}
@@ -55,27 +55,11 @@ class MDSettings extends React.Component {
 					<div className="md-scheme-list">
 						<div className="md-scheme-list-section-title">动态主题</div>
 						<div className="md-scheme-list-section-description">根据歌曲封面动态生成配色</div>
-						<SchemeItem
-							key="dynamic-dark"
-							scheme={ {name: 'dynamic-dark', palette: {}}}
-							active={ this.state.scheme === 'dynamic-dark' }
-							setScheme={ this.setScheme }
-						/>
-						<SchemeItem
-							key="dynamic-light"
-							scheme={ {name: 'dynamic-light', palette: {	}}}
-							active={ this.state.scheme === 'dynamic-light' }
-							setScheme={ this.setScheme }
-						/>
-						<SchemeItem
-							key="dynamic-auto"
-							scheme={ {name: 'dynamic-auto', palette: {}}}
-							active={ this.state.scheme === 'dynamic-auto' }
-							setScheme={ (scheme) => {
-								this.setScheme(scheme);
-								document.body.dispatchEvent(new CustomEvent('md-dynamic-theme-auto'));
-							}}
-						/>
+						<DynamicSchemeSet name="default" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
+						<DynamicSchemeSet name="tonal-spot" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
+						<DynamicSchemeSet name="vibrant" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
+						<DynamicSchemeSet name="expressive" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
+						<DynamicSchemeSet name="neutral" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<div className="md-scheme-list-section-title">普通主题</div>
 						{
 							this.props.list.map((item, index) => {
@@ -121,21 +105,86 @@ class MDSettings extends React.Component {
 	}
 }
 
-class SchemeItem extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		return (
-			<div className={`md-scheme-item ${this.props.active ? 'active' : ''}`}>
-				<SchemePreview scheme={ this.props.scheme.palette } setScheme= {() => { this.props.setScheme(this.props.scheme); }} name={ this.props.scheme.name } />
-				<div className="md-scheme-item-name-container">
-					<span className="md-scheme-item-indicator"></span>
-					<span className="md-scheme-item-name">{ this.props.scheme.name.replace(/\-/g, ' ') }</span>
-				</div>
+function DynamicSchemeSet(props) {
+	const [cssVariables, setCssVariables] = React.useState({});
+
+	React.useEffect(() => {
+		const onDominantColorChange = () => {
+			const newCssVariables = getThemeCSSFromColor(`dynamic-${props.name}`);
+			setCssVariables(newCssVariables);
+		};
+		document.body.addEventListener('md-dominant-color-change', () => {
+			onDominantColorChange();
+		});
+		onDominantColorChange();
+		return () => {
+			document.body.removeEventListener('md-dominant-color-change', () => {
+				onDominantColorChange();
+			});
+		};
+	}, []);
+
+	return (
+		<React.Fragment>
+			<SchemeItem
+				key={`dynamic-${props.name}-dark`}
+				dynamic={true}
+				scheme={ {name: `dynamic-${props.name}-dark`, palette: {}}}
+				active={ props.activeScheme === `dynamic-${props.name}-dark` }
+				setScheme={ props.setScheme }
+				cssVariablesOverride={cssVariables}
+			/>
+			<SchemeItem
+				key={`dynamic-${props.name}-light`}
+				dynamic={true}
+				scheme={ {name: `dynamic-${props.name}-light`, palette: {}}}
+				active={ props.activeScheme === `dynamic-${props.name}-light` }
+				setScheme={ props.setScheme }
+				cssVariablesOverride={cssVariables}
+			/>
+			<SchemeItem
+				key={`dynamic-${props.name}-auto`}
+				dynamic={true}
+				scheme={ {name: `dynamic-${props.name}-auto`, palette: {}}}
+				active={ props.activeScheme === `dynamic-${props.name}-auto` }
+				setScheme={ (scheme) => {
+					props.setScheme(scheme);
+					document.body.dispatchEvent(new CustomEvent('md-dynamic-theme-auto'));
+				}}
+				cssVariablesOverride={cssVariables}
+			/>
+		</React.Fragment>
+	);
+}
+
+function SchemeItem(props) {
+	const containerRef = React.useRef(null);
+
+	React.useEffect(() => {
+		if (!props.cssVariablesOverride) return;
+		if (containerRef.current) {
+			let style = containerRef.current.style;
+			for (let i = 0; i < style.length; i++) {
+				let key = style[i];
+				if (key.startsWith('--')) {
+					style.removeProperty(key);
+				}
+			}
+		}
+		Object.entries(props.cssVariablesOverride).forEach(([key, value]) => {
+			containerRef.current.style.setProperty(key, value);
+		});
+	}, [props.cssVariablesOverride]);
+
+	return (
+		<div ref={containerRef} className={`md-scheme-item ${props.dynamic ? 'md-scheme-item-dynamic' : ''} ${props.active ? 'active' : ''}`}>
+			<SchemePreview scheme={ props.scheme.palette } setScheme= {() => { props.setScheme(props.scheme); }} name={ props.scheme.name } />
+			<div className="md-scheme-item-name-container">
+				<span className="md-scheme-item-indicator"></span>
+				<span className="md-scheme-item-name">{ props.scheme.name.replace(/^dynamic\-/, '').replace(/\-/g, ' ') }</span>
 			</div>
-		);
-	}
+		</div>
+	);
 }
 
 class SchemePreview extends React.Component {
@@ -210,7 +259,7 @@ class SchemePreview extends React.Component {
 					}
 				}>
 				{ this.inner() }
-				{ this.props.name == 'dynamic-auto' ? this.inner() : null }
+				{ this.props.name.startsWith('dynamic') && this.props.name.endsWith('-auto') ? this.inner() : null }
 			</div>
 		);
 	}

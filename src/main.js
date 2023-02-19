@@ -4,8 +4,14 @@ import { injectHTML, waitForElement, getSetting, setSetting, makeToast, chunk } 
 import { argb2Rgb } from './color-utils.js';
 import { schemePresets } from './scheme-presets.js';
 import { initSettingMenu } from './settings.js';
-import { themeFromSourceColor, QuantizerCelebi, Hct, Score } from "@importantimport/material-color-utilities";
+import { themeFromSourceColor, QuantizerCelebi, Hct, Score, DynamicScheme, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "../material-color-utilities/typescript/dist";
 
+const migrateSettings = () => {
+	if (getSetting('scheme') == 'dynamic-auto') {
+		setSetting('scheme', 'dynamic-default-auto');
+	}
+}
+migrateSettings();
 
 const addOrRemoveGlobalClassByOption = (className, optionValue) => {
 	if (optionValue) {
@@ -53,6 +59,7 @@ const overrideNCMCSS = (mutated) => {
 }
 
 export const applyScheme = (scheme) => {
+	window.mdScheme = scheme;
 	if (scheme.startsWith('dynamic')) {
 		document.body.classList.add('md-dynamic-theme');
 		document.body.classList.remove('md-dynamic-theme-light', 'md-dynamic-theme-dark', 'md-dynamic-theme-auto');
@@ -63,6 +70,8 @@ export const applyScheme = (scheme) => {
 			overrideNCMCSS('pri-skin-gride');
 			overrideNCMCSS('skin_default');
 		}
+		window.mdScheme = scheme;
+		updateDynamicTheme();
 		return;
 	} else {
 		document.body.classList.remove('md-dynamic-theme');
@@ -98,7 +107,7 @@ export const applyScheme = (scheme) => {
 }
 
 const initSettings = () => {
-	applyScheme(getSetting('scheme', 'dynamic-auto'));
+	applyScheme(getSetting('scheme', 'dynamic-default-auto'));
 
 	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing-page', false));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
@@ -363,29 +372,103 @@ const scrollToCurrentPlaying = () => {
 
 
 
-const dynamicColorController = document.createElement('style');
-dynamicColorController.innerHTML = `
-	:root {
-		--md-dynamic-light-primary: rgb(103, 80, 164);
-		--md-dynamic-light-primary-rgb: 103, 80, 164;
-		--md-dynamic-light-secondary: rgb(98, 91, 113);
-		--md-dynamic-light-secondary-rgb: 98, 91, 113;
-		--md-dynamic-light-bg: rgb(244, 239, 244);
-		--md-dynamic-light-bg-rgb: 244, 239, 244;
-		--md-dynamic-light-bg-darken: rgb(251, 246, 251);
-		--md-dynamic-light-bg-darken-rgb: 251, 246, 251;
-
-		--md-dynamic-dark-primary: rgb(208, 188, 255);
-		--md-dynamic-dark-primary-rgb: 208, 188, 255;
-		--md-dynamic-dark-secondary: rgb(204, 194, 220);
-		--md-dynamic-dark-secondary-rgb: 204, 194, 220;
-		--md-dynamic-dark-bg: rgb(49, 48, 51);
-		--md-dynamic-dark-bg-rgb: 49, 48, 51;
-		--md-dynamic-dark-bg-darken: rgb(38, 37, 40);
-		--md-dynamic-dark-bg-darken-rgb: 38, 37, 40;		
+export const getThemeCSSFromColor = (schemeName = null) => {
+	const color = window.mdDominantColor;
+	if (!color) {
+		return defaultDynamicColor;
 	}
-`;
+	if (!schemeName) {
+		schemeName = window.mdScheme ?? 'dynamic-default-auto';
+	}
+	if (!schemeName.startsWith('dynamic-')) {
+		return '';
+	}
+	schemeName = schemeName.replace(/^dynamic-/, '');
+	schemeName = schemeName.replace(/-(light|dark|auto)$/, '');
+
+	if (schemeName === 'default') {
+		const theme = themeFromSourceColor(color);
+
+		theme.schemes.light.bgDarken = (Hct.from(theme.palettes.neutral.hue, theme.palettes.neutral.chroma, 97.5)).toInt();
+		theme.schemes.dark.bgDarken = (Hct.from(theme.palettes.neutral.hue, theme.palettes.neutral.chroma, 15)).toInt();
+
+		let newCSSItems = {};
+		const updateColor = (colorMode, key, name) => {
+			const [r, g, b] = [...argb2Rgb(theme.schemes[colorMode][key])]
+			newCSSItems[`--md-dynamic-${colorMode}-${name}`] = `rgb(${r}, ${g}, ${b})`;
+			newCSSItems[`--md-dynamic-${colorMode}-${name}-rgb`] = `${r}, ${g}, ${b}`;
+		}
+		for (let colorMode of ['light', 'dark']) {
+			updateColor(colorMode, 'primary', 'primary');
+			updateColor(colorMode, 'secondary', 'secondary');
+			updateColor(colorMode, 'inverseOnSurface', 'bg');
+			updateColor(colorMode, 'bgDarken', 'bg-darken');
+		}
+		return newCSSItems;
+	} else {
+		const schemeGenerator = {
+			'tonal-spot': SchemeTonalSpot,
+			'vibrant': SchemeVibrant,
+			'expressive': SchemeExpressive,
+			'neutral': SchemeNeutral,
+		};
+		const dynamicScheme = {};
+		dynamicScheme.light = new schemeGenerator[schemeName](
+			Hct.fromInt(color),
+			false,
+			0.0
+		);
+		dynamicScheme.dark = new schemeGenerator[schemeName](
+			Hct.fromInt(color),
+			true,
+			0.0
+		);
+
+		let newCSSItems = {};
+		const updateColor = (colorMode, key, name) => {
+			const [r, g, b] = [...argb2Rgb(MaterialDynamicColors[key].getArgb(dynamicScheme[colorMode]))];
+			newCSSItems[`--md-dynamic-${colorMode}-${name}`] = `rgb(${r}, ${g}, ${b})`;
+			newCSSItems[`--md-dynamic-${colorMode}-${name}-rgb`] = `${r}, ${g}, ${b}`;
+		}
+		for (let colorMode of ['light', 'dark']) {
+			updateColor(colorMode, 'primary', 'primary');
+			updateColor(colorMode, 'secondary', 'secondary');
+			updateColor(colorMode, 'background', 'bg');
+			updateColor(colorMode, 'surfaceSub2', 'bg-darken');
+		}
+		return newCSSItems;
+	}
+}
+const dynamicColorController = document.createElement('style');
+const defaultDynamicColor = {
+	'--md-dynamic-light-primary': 'rgb(103, 80, 164)',
+	'--md-dynamic-light-primary-rgb': '103, 80, 164',
+	'--md-dynamic-light-secondary': 'rgb(98, 91, 113)',
+	'--md-dynamic-light-secondary-rgb': '98, 91, 113',
+	'--md-dynamic-light-bg': 'rgb(244, 239, 244)',
+	'--md-dynamic-light-bg-rgb': '244, 239, 244',
+	'--md-dynamic-light-bg-darken': 'rgb(251, 246, 251)',
+	'--md-dynamic-light-bg-darken-rgb': '251, 246, 251',
+
+	'--md-dynamic-dark-primary': 'rgb(208, 188, 255)',
+	'--md-dynamic-dark-primary-rgb': '208, 188, 255',
+	'--md-dynamic-dark-secondary': 'rgb(204, 194, 220)',
+	'--md-dynamic-dark-secondary-rgb': '204, 194, 220',
+	'--md-dynamic-dark-bg': 'rgb(49, 48, 51)',
+	'--md-dynamic-dark-bg-rgb': '49, 48, 51',
+	'--md-dynamic-dark-bg-darken': 'rgb(38, 37, 40)',
+	'--md-dynamic-dark-bg-darken-rgb': '38, 37, 40',
+};
 document.head.appendChild(dynamicColorController);
+const updateDynamicTheme = () => {
+	const CSSItems = getThemeCSSFromColor();
+	let CSS = '';
+	for (const [key, value] of Object.entries(CSSItems)) {
+		CSS += `${key}: ${value};`;
+	}
+	dynamicColorController.innerHTML = `:root {${CSS}}`;
+};
+updateDynamicTheme();
 const updateDynamicColor = () => {
 	const dom = document.querySelector(".m-pinfo .j-cover");
 	if (!dom) return;
@@ -403,24 +486,10 @@ const updateDynamicColor = () => {
 	const ranked = Score.score(quantizedColors);
 	const top = ranked[0];
 
-	const theme = themeFromSourceColor(top);
+	window.mdDominantColor = top;
+	document.body.dispatchEvent(new CustomEvent('md-dominant-color-change', { detail: top }));
 
-	theme.schemes.light.bgDarken = (Hct.from(theme.palettes.neutral.hue, theme.palettes.neutral.chroma, 97.5)).toInt();
-	theme.schemes.dark.bgDarken = (Hct.from(theme.palettes.neutral.hue, theme.palettes.neutral.chroma, 15)).toInt();
-
-	let newCSSItems = '';
-	const updateColor = (scheme, key, name) => {
-		const [r, g, b] = [...argb2Rgb(theme.schemes[scheme][key])]
-		newCSSItems += `--md-dynamic-${scheme}-${name}: rgb(${r}, ${g}, ${b});`
-		newCSSItems += `--md-dynamic-${scheme}-${name}-rgb: ${r}, ${g}, ${b};`
-	}
-	for (let scheme of ['light', 'dark']) {
-		updateColor(scheme, 'primary', 'primary');
-		updateColor(scheme, 'secondary', 'secondary');
-		updateColor(scheme, 'inverseOnSurface', 'bg');
-		updateColor(scheme, 'bgDarken', 'bg-darken');
-	}
-	dynamicColorController.innerHTML = `:root {${newCSSItems}}`;
+	updateDynamicTheme();
 }
 
 plugin.onLoad(async (p) => {
@@ -586,7 +655,7 @@ plugin.onLoad(async (p) => {
 		let oldSrc = '';
 		const update = () => {
 			const img = dom.querySelector('.j-cover');
-			if (oldSrc == img.src) return;
+			if (oldSrc == img?.src) return;
 			if (img.complete) {
 				oldSrc = img.src;
 				updateDynamicColor();
