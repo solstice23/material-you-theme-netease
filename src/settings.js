@@ -1,6 +1,6 @@
 import { getSetting, setSetting } from "./utils";
 import { schemePresets } from "./scheme-presets";
-import { applyScheme, getThemeCSSFromColor } from "./main";
+import { applyScheme, getThemeCSSFromColor, updateDynamicTheme } from "./main";
 import './settings.scss';
 class MDSettings extends React.Component {
 	constructor(props) {
@@ -60,6 +60,9 @@ class MDSettings extends React.Component {
 						<DynamicSchemeSet name="vibrant" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<DynamicSchemeSet name="expressive" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<DynamicSchemeSet name="neutral" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
+					</div>
+					<CustomDynamicThemeSetting show={ this.state.scheme.startsWith('dynamic-') } />
+					<div className="md-scheme-list">
 						<div className="md-scheme-list-section-title">普通主题</div>
 						{
 							this.props.list.map((item, index) => {
@@ -68,6 +71,8 @@ class MDSettings extends React.Component {
 								);
 							})
 						}
+					</div>
+					<div className="md-scheme-list">
 						<div className="md-scheme-list-section-title">自定义主题</div>
 						<SchemeItem key="custom" scheme={ {name: 'custom', palette: this.state.customPreset} } active={ this.state.scheme === 'custom' } setScheme={ 
 							(scheme) => {
@@ -333,7 +338,14 @@ class ColorField extends React.Component {
 	render() {
 		return (
 			<div className="md-color-field">
-				<div className="md-color-field-color" style={{ backgroundColor: `rgb(${this.getCurrentColor().join(',')})` }}></div>
+				<input className="md-color-field-color" type="color" value={ '#' + this.getCurrentColor().map((v) => {
+					return v.toString(16).padStart(2, '0');
+				}).join('') } onChange={ (e) => {
+					const color = e.target.value.substr(1).match(/.{2}/g).map((v) => parseInt(v, 16));
+					this.setState({ color }, () => {
+						this.props.setColor(this.getCurrentColor());
+					});
+				}} />
 				<div className="md-color-field-label">{ this.props.label }</div>
 				{
 					['R', 'G', 'B'].map((v, i) => {
@@ -367,6 +379,48 @@ class ColorField extends React.Component {
 		);
 	}
 }
+function CustomDynamicThemeSetting(props) {
+	const [dynamicThemeColorSource, setDynamicThemeColorSource] = React.useState(getSetting('dynamic-theme-color-source', 'cover'));
+	const [customDynamicThemeColor, setCustomDynamicThemeColor] = React.useState(JSON.parse(getSetting('custom-dynamic-theme-color', '[189, 230, 251]')));
+
+	React.useEffect(() => {
+		window.mdDynamicThemeColorSource = dynamicThemeColorSource;
+		updateDynamicTheme();
+		document.body.dispatchEvent(new CustomEvent('md-dominant-color-change'));
+	}, [dynamicThemeColorSource]);
+	
+	return (
+		props.show && 
+		(
+			<div className="md-custom-scheme-setting">
+				<div className="md-theme-setting-subtitle">取色选项</div>
+				<div class="md-select">
+					<label class="md-select-label">取色来源</label>
+					<select className="md-theme-setting-select" value={ dynamicThemeColorSource } onChange={ (e) => {
+							setDynamicThemeColorSource(e.target.value);
+							setSetting('dynamic-theme-color-source', e.target.value);
+						} }>
+						<option value="cover">当前歌曲封面</option>
+						<option value="custom">自定义</option>
+					</select>
+				</div>
+				{
+					dynamicThemeColorSource === 'custom' &&
+					(
+						<ColorField color={ customDynamicThemeColor } label="自定义颜色" defaultColor={[189, 230, 251]} setColor={ (value) => {
+							setCustomDynamicThemeColor(value);
+							setSetting('custom-dynamic-theme-color', JSON.stringify(value));
+							window.mdCostomDynamicThemeColor = value;
+							updateDynamicTheme();
+							document.body.dispatchEvent(new CustomEvent('md-dominant-color-change'));
+						} } />
+					)
+				}
+			</div>
+		)
+	);
+}
+
 
 
 

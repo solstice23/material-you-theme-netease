@@ -373,8 +373,17 @@ const scrollToCurrentPlaying = () => {
 
 
 
+export const getDynamicThemeColor = () => {
+	const source = window.mdDynamicThemeColorSource ?? getSetting('dynamic-theme-color-source', 'cover');
+	if (source == 'cover') {
+		return window.mdDominantColor;
+	} else {
+		const color = window.mdCostomDynamicThemeColor ?? JSON.parse(getSetting('custom-dynamic-theme-color', '[189, 230, 251]'));
+		return (color[0] << 16 >>> 0) | (color[1] << 8 >>> 0) | color[2];
+	}
+}
 export const getThemeCSSFromColor = (schemeName = null) => {
-	const color = window.mdDominantColor;
+	let color = getDynamicThemeColor();
 	if (!color) {
 		return defaultDynamicColor;
 	}
@@ -461,7 +470,7 @@ const defaultDynamicColor = {
 	'--md-dynamic-dark-bg-darken-rgb': '38, 37, 40',
 };
 document.head.appendChild(dynamicColorController);
-const updateDynamicTheme = () => {
+export const updateDynamicTheme = () => {
 	const CSSItems = getThemeCSSFromColor();
 	let CSS = '';
 	for (const [key, value] of Object.entries(CSSItems)) {
@@ -488,7 +497,7 @@ const updateDynamicColor = () => {
 	const top = ranked[0];
 
 	window.mdDominantColor = top;
-	document.body.dispatchEvent(new CustomEvent('md-dominant-color-change', { detail: top }));
+	document.body.dispatchEvent(new CustomEvent('md-dominant-color-change'));
 
 	updateDynamicTheme();
 }
