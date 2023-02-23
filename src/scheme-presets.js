@@ -226,5 +226,12 @@ export const schemePresets = {
 		'primary': [240, 240, 240],
 		'bg': [0, 0, 0],
 		'bg-darken': [20, 20, 20]
-	}
+	},
+	'Cloud ＆ Moon': {
+		'primary': [93, 131, 194],
+		'secondary': [87, 111, 147],
+		'bg': [237, 241, 248],
+		'bg-darken': [247, 250, 245],
+		'light': true
+	},
 }

@@ -1764,7 +1764,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		}
 	}
 	// Main: podcast list
-	.m-tblist {
+	.m-tblist:not(:empty) {
 		margin: 25px;
 		width: calc(100% - 50px);
 		box-sizing: content-box;
