@@ -2320,6 +2320,73 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			height: 50px;
 		}
 	}
+	.m-timeline-head .mixin-portalified > *{
+		border: none;
+		> a {
+			margin: 0 !important;
+		}
+	}
+
+
+	// NEW UI
+	&:not(.md-disable-new-ui) {
+		@include mixed-background-color(var(--md-accent-color-bg-rgb), var(--md-accent-color-rgb), 0.03);
+		.g-mn {
+			background: var(--md-accent-color-bg);
+			border-radius: 20px 0 0 0;
+		}
+		.g-sd {
+			border-radius: 0;
+		}
+		.m-logo {
+			svg {
+				fill: var(--md-accent-color-secondary);
+			}
+			.logo2 {
+				margin-left: 5px;
+				margin-top: -2px;
+			}
+		}
+		&:not(.hide-ncm-logo) {
+			.m-nav {
+				padding-top: 0px;
+			}
+			.g-sd {
+				top: 60px;
+				border-radius: 0;
+			}
+			#x-g-mn::before {
+				content: '';
+				display: block;
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				height: 60px;
+				z-index: 71;
+				width: var(--sidebar-width);
+				pointer-events: none;
+				@include mixed-background-color(var(--md-accent-color-bg-rgb), var(--md-accent-color-rgb), 0.03);
+			}
+		}
+		&:not(.capsule-sidebar) {
+			.g-sd .m-nav ul li a {
+				margin-left: 0 !important;
+				border-radius: 0 100px 100px 0 !important;
+				padding-left: 45px;
+				svg {
+					margin-left: 5px;
+				}
+				&::after {
+					border-radius: 0 100px 100px 0;
+					transform-origin: left;
+				}
+			}
+			.g-sd .m-nav ul li.fsection a {
+				padding-left: 17px;
+			}
+		}
+	}
 }
 .g-single .g-single-bd .bg {
 	background: transparent !important;

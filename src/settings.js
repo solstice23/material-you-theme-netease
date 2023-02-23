@@ -8,7 +8,10 @@ class MDSettings extends React.Component {
 		this.state = {
 			open: false,
 			scheme: 'dynamic-auto',
-			ignoreNowPlaying: true,
+			ignoreNowPlaying: false,
+			capsuleSidebar: false,
+			hideNCMLogo: false,
+			disableNewUI: false,
 			customPreset: JSON.parse(getSetting('custom-scheme', JSON.stringify({
 				'primary': [189, 230, 251],
 				'secondary': [],
@@ -22,7 +25,10 @@ class MDSettings extends React.Component {
 	componentDidMount() {
 		this.setState({
 			scheme: getSetting('scheme', 'dynamic-default-auto'),
-			ignoreNowPlaying: getSetting('ignore-now-playing-page', false)
+			ignoreNowPlaying: getSetting('ignore-now-playing-page', false),
+			capsuleSidebar: getSetting('capsule-sidebar', false),
+			hideNCMLogo: getSetting('hide-ncm-logo', false),
+			disableNewUI: getSetting('disable-new-ui', false)
 		});
 	}
 	setScheme(scheme) {
@@ -91,10 +97,51 @@ class MDSettings extends React.Component {
 							}} />
 						) : null
 					}
-					<div className="md-theme-setting-subtitle">其他设置</div>					
+					<div className="md-theme-setting-subtitle">界面</div>
+					{
+						!this.state.disableNewUI && <>
+							<div class="md-checkbox-wrapper">
+								<input id="md-hide-ncm-logo" type="checkbox" className="md-checkbox" checked={ this.state.hideNCMLogo } onChange={ (e) => {
+									this.setState({ hideNCMLogo: e.target.checked });
+									if (e.target.checked) {
+										document.body.classList.add('hide-ncm-logo');
+									} else {
+										document.body.classList.remove('hide-ncm-logo');
+									}
+									setSetting('hide-ncm-logo', e.target.checked);
+								}} />
+								<label for="md-hide-ncm-logo" class="md-checkbox-label">隐藏网易云 Logo</label>
+							</div>
+							<div class="md-checkbox-wrapper">
+								<input id="md-capsule-sidebar" type="checkbox" className="md-checkbox" checked={ this.state.capsuleSidebar } onChange={ (e) => {
+									this.setState({ capsuleSidebar: e.target.checked });
+									if (e.target.checked) {
+										document.body.classList.add('capsule-sidebar');
+									} else {
+										document.body.classList.remove('capsule-sidebar');
+									}
+									setSetting('capsule-sidebar', e.target.checked);
+								}} />
+								<label for="md-capsule-sidebar" class="md-checkbox-label">胶囊侧栏</label>
+							</div>
+						</>
+					}
 					<div class="md-checkbox-wrapper">
-						<input id="md-ignore-now-playing-page" type="checkbox" className="md-checkbox" checked={ this.state.ignoreNowPlayingPage } onChange={ (e) => {
-							this.setState({ ignoreNowPlayingPage: e.target.checked });
+						<input id="md-disable-new-ui" type="checkbox" className="md-checkbox" checked={ this.state.disableNewUI } onChange={ (e) => {
+							this.setState({ disableNewUI: e.target.checked });
+							if (e.target.checked) {
+								document.body.classList.add('md-disable-new-ui');
+							} else {
+								document.body.classList.remove('md-disable-new-ui');
+							}
+							setSetting('disable-new-ui', e.target.checked);
+						}} />
+						<label for="md-disable-new-ui" class="md-checkbox-label">禁用新 UI</label>
+					</div>
+					<div className="md-theme-setting-subtitle">其他设置</div>
+					<div class="md-checkbox-wrapper">
+						<input id="md-ignore-now-playing-page" type="checkbox" className="md-checkbox" checked={ this.state.ignoreNowPlaying } onChange={ (e) => {
+							this.setState({ ignoreNowPlaying: e.target.checked });
 							if (e.target.checked) {
 								document.body.classList.add('ignore-now-playing');
 							} else {

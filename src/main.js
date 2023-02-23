@@ -111,6 +111,9 @@ const initSettings = () => {
 	applyScheme(getSetting('scheme', 'dynamic-default-auto'));
 
 	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing-page', false));
+	addOrRemoveGlobalClassByOption('hide-ncm-logo', getSetting('hide-ncm-logo', false));
+	addOrRemoveGlobalClassByOption('capsule-sidebar', getSetting('capsule-sidebar', false));
+	addOrRemoveGlobalClassByOption('md-disable-new-ui', getSetting('disable-new-ui', false));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
 	
 	window.timeIndicator = getSetting('time-indicator', 'remain');
