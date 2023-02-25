@@ -2353,7 +2353,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		}
 		.m-logo {
 			svg {
-				fill: var(--md-accent-color-secondary);
+				fill: var(--md-accent-color-secondary) !important;
 			}
 			.logo2 {
 				margin-left: 5px;
