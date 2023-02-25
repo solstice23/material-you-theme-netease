@@ -116,7 +116,7 @@ const initSettings = () => {
 	addOrRemoveGlobalClassByOption('capsule-sidebar', getSetting('capsule-sidebar', false));
 	addOrRemoveGlobalClassByOption('md-disable-new-ui', getSetting('disable-new-ui', false));
 	addOrRemoveGlobalClassByOption('floating-bottombar', getSetting('floating-bottombar', false));
-	addOrRemoveGlobalClassByOption('hide-bottombar', getSetting('transparent-framework', false));
+	addOrRemoveGlobalClassByOption('transparent-framework', getSetting('transparent-framework', false));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
 }
 
