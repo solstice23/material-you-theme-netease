@@ -12,6 +12,8 @@ class MDSettings extends React.Component {
 			capsuleSidebar: false,
 			hideNCMLogo: false,
 			disableNewUI: false,
+			floatingBottombar: false,
+			transparentFramework: false,
 			customPreset: JSON.parse(getSetting('custom-scheme', JSON.stringify({
 				'primary': [189, 230, 251],
 				'secondary': [],
@@ -28,7 +30,9 @@ class MDSettings extends React.Component {
 			ignoreNowPlaying: getSetting('ignore-now-playing-page', false),
 			capsuleSidebar: getSetting('capsule-sidebar', false),
 			hideNCMLogo: getSetting('hide-ncm-logo', false),
-			disableNewUI: getSetting('disable-new-ui', false)
+			disableNewUI: getSetting('disable-new-ui', false),
+			floatingBottombar: getSetting('floating-bottombar', false),
+			transparentFramework: getSetting('transparent-framework', false)
 		});
 	}
 	setScheme(scheme) {
@@ -100,7 +104,7 @@ class MDSettings extends React.Component {
 					<div className="md-theme-setting-subtitle">界面</div>
 					{
 						!this.state.disableNewUI && <>
-							<div class="md-checkbox-wrapper">
+							<div className="md-checkbox-wrapper">
 								<input id="md-hide-ncm-logo" type="checkbox" className="md-checkbox" checked={ this.state.hideNCMLogo } onChange={ (e) => {
 									this.setState({ hideNCMLogo: e.target.checked });
 									if (e.target.checked) {
@@ -110,9 +114,9 @@ class MDSettings extends React.Component {
 									}
 									setSetting('hide-ncm-logo', e.target.checked);
 								}} />
-								<label for="md-hide-ncm-logo" class="md-checkbox-label">隐藏网易云 Logo</label>
+								<label for="md-hide-ncm-logo" className="md-checkbox-label">隐藏网易云 Logo</label>
 							</div>
-							<div class="md-checkbox-wrapper">
+							<div className="md-checkbox-wrapper">
 								<input id="md-capsule-sidebar" type="checkbox" className="md-checkbox" checked={ this.state.capsuleSidebar } onChange={ (e) => {
 									this.setState({ capsuleSidebar: e.target.checked });
 									if (e.target.checked) {
@@ -122,11 +126,11 @@ class MDSettings extends React.Component {
 									}
 									setSetting('capsule-sidebar', e.target.checked);
 								}} />
-								<label for="md-capsule-sidebar" class="md-checkbox-label">胶囊侧栏</label>
+								<label for="md-capsule-sidebar" className="md-checkbox-label">胶囊侧栏</label>
 							</div>
 						</>
 					}
-					<div class="md-checkbox-wrapper">
+					<div className="md-checkbox-wrapper">
 						<input id="md-disable-new-ui" type="checkbox" className="md-checkbox" checked={ this.state.disableNewUI } onChange={ (e) => {
 							this.setState({ disableNewUI: e.target.checked });
 							if (e.target.checked) {
@@ -136,10 +140,34 @@ class MDSettings extends React.Component {
 							}
 							setSetting('disable-new-ui', e.target.checked);
 						}} />
-						<label for="md-disable-new-ui" class="md-checkbox-label">禁用新 UI</label>
+						<label for="md-disable-new-ui" className="md-checkbox-label">禁用新 UI</label>
+					</div>
+					<div className="md-checkbox-wrapper">
+						<input id="md-floating-bottombar" type="checkbox" className="md-checkbox" checked={ this.state.floatingBottombar } onChange={ (e) => {
+							this.setState({ floatingBottombar: e.target.checked });
+							if (e.target.checked) {
+								document.body.classList.add('floating-bottombar');
+							} else {
+								document.body.classList.remove('floating-bottombar');
+							}
+							setSetting('floating-bottombar', e.target.checked);
+						}} />
+						<label for="md-floating-bottombar" className="md-checkbox-label">悬浮底栏</label>
+					</div>
+					<div className="md-checkbox-wrapper md-transparent-framework-switch">
+						<input id="md-transparent-framework" type="checkbox" className="md-checkbox" checked={ this.state.transparentFramework } onChange={ (e) => {
+							this.setState({ transparentFramework: e.target.checked });
+							if (e.target.checked) {
+								document.body.classList.add('transparent-framework');
+							} else {
+								document.body.classList.remove('transparent-framework');
+							}
+							setSetting('transparent-framework', e.target.checked);
+						}} />
+						<label for="md-transparent-framework" className="md-checkbox-label">全透明框架</label>
 					</div>
 					<div className="md-theme-setting-subtitle">其他设置</div>
-					<div class="md-checkbox-wrapper">
+					<div className="md-checkbox-wrapper">
 						<input id="md-ignore-now-playing-page" type="checkbox" className="md-checkbox" checked={ this.state.ignoreNowPlaying } onChange={ (e) => {
 							this.setState({ ignoreNowPlaying: e.target.checked });
 							if (e.target.checked) {
@@ -149,7 +177,7 @@ class MDSettings extends React.Component {
 							}
 							setSetting('ignore-now-playing-page', e.target.checked);
 						}} />
-						<label for="md-ignore-now-playing-page" class="md-checkbox-label">在正在播放页面中不应用主题</label>
+						<label for="md-ignore-now-playing-page" className="md-checkbox-label">在正在播放页面中不应用主题</label>
 					</div>
 				</div>
 			</div>
@@ -349,11 +377,11 @@ class CustomSchemeSetting extends React.Component {
 				<ColorField color={ this.state.scheme['secondary'] } label="次色 (文字)" defaultColor={this.state.scheme['primary'] ?? [189, 230, 251]} setColor={ (value) => { this.setColor('secondary', value); } } optional={true} />
 				<ColorField color={ this.state.scheme['bg'] } label="背景" defaultColor={[30, 37, 41]} setColor={ (value) => { this.setColor('bg', value); } } />
 				<ColorField color={ this.state.scheme['bg-darken'] } label="背景 (暗化)" defaultColor={[23, 29, 32]} setColor={ (value) => { this.setColor('bg-darken', value); } } />
-				<div class="md-checkbox-wrapper">
+				<div className="md-checkbox-wrapper">
 					<input id="md-custom-scheme-light" type="checkbox" className="md-checkbox" checked={ this.state.scheme.light } onChange={ (e) => {
 						this.setColor('light', e.target.checked);
 					}} />
-					<label for="md-custom-scheme-light" class="md-checkbox-label">亮色主题</label>
+					<label for="md-custom-scheme-light" className="md-checkbox-label">亮色主题</label>
 				</div>
 			</div>
 		);
@@ -441,14 +469,18 @@ function CustomDynamicThemeSetting(props) {
 		(
 			<div className="md-custom-scheme-setting">
 				<div className="md-theme-setting-subtitle">取色选项</div>
-				<div class="md-select">
-					<label class="md-select-label">取色来源</label>
+				<div className="md-select">
+					<label className="md-select-label">取色来源</label>
 					<select className="md-theme-setting-select" value={ dynamicThemeColorSource } onChange={ (e) => {
 							setDynamicThemeColorSource(e.target.value);
 							setSetting('dynamic-theme-color-source', e.target.value);
 						} }>
 						<option value="cover">当前歌曲封面</option>
-						<option value="custom">自定义</option>
+						{
+							(document.body.classList.contains('md-has-background') || document.body.classList.contains('bg-enhanced')) &&
+							<option value="bg-enhanced">背景图片 (BGEnhanced)</option>
+						}
+						<option value="custom">自定义颜色</option>
 					</select>
 				</div>
 				{

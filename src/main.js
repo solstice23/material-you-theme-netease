@@ -6,6 +6,7 @@ import { schemePresets } from './scheme-presets.js';
 import { initSettingMenu } from './settings.js';
 import { themeFromSourceColor, QuantizerCelebi, Hct, Score, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "../material-color-utilities/typescript/dist";
 import { ListViewSwitcher } from './list-view-switcher.js';
+import { TimeIndicator } from './time-indicator.js';
 
 const migrateSettings = () => {
 	if (getSetting('scheme') == 'dynamic-auto') {
@@ -114,57 +115,9 @@ const initSettings = () => {
 	addOrRemoveGlobalClassByOption('hide-ncm-logo', getSetting('hide-ncm-logo', false));
 	addOrRemoveGlobalClassByOption('capsule-sidebar', getSetting('capsule-sidebar', false));
 	addOrRemoveGlobalClassByOption('md-disable-new-ui', getSetting('disable-new-ui', false));
+	addOrRemoveGlobalClassByOption('floating-bottombar', getSetting('floating-bottombar', false));
+	addOrRemoveGlobalClassByOption('hide-bottombar', getSetting('transparent-framework', false));
 	document.body.style.setProperty('--bottombar-height', `${getSetting('bottombar-height', 90)}px`);
-	
-	window.timeIndicator = getSetting('time-indicator', 'remain');
-}
-const addPrefixZero = (num, len) => {
-	num = num.toString();
-	while (num.length < len) {
-		num = '0' + num;
-	}
-	return num;
-}
-const timeToSeconds = (time) => {
-	let seconds = 0;
-	const parts = time.split(':');
-	for (let i = 0; i < parts.length; i++) {
-		seconds += parseInt(parts[i]) * Math.pow(60, parts.length - i - 1);
-	}
-	return seconds;
-}
-const secondsToTime = (seconds) => {
-	const m = Math.floor(seconds / 60);
-	const s = Math.floor(seconds % 60);
-	return `${m}:${addPrefixZero(s, 2)}`;
-}
-
-
-const updateTimeIndicator = () => {
-	const passed = document.querySelector('#time-passed');
-	const rest = document.querySelector('#time-rest');
-
-	const passedTime = timeToSeconds(document.querySelector('time.now').innerText);
-	const totalTime = timeToSeconds(document.querySelector('time.all').innerText);
-	const remainTime = totalTime - passedTime;
-
-	passed.innerText = secondsToTime(passedTime);
-	rest.innerText = window.timeIndicator == 'remain' ? '-' + secondsToTime(remainTime) : secondsToTime(totalTime);
-}
-const updateTimeIndicatorPosition = () => {
-	const selectorList = ['.brt', '.speed', '.audioEffect', '.spk'];
-	let leftestButton;
-	for (const selector of selectorList) {
-		leftestButton = document.querySelector('.m-player ' + selector);
-		if (!leftestButton) {
-			continue;
-		}
-		if (leftestButton.childElementCount != 0) {
-			break;
-		}
-	}
-	const right = parseInt(window.getComputedStyle(leftestButton).right) + leftestButton.clientWidth + 10;
-	document.querySelector('#time-indicator').style.right = right + 'px';
 }
 
 const updateGreeting = () => {
@@ -379,8 +332,11 @@ const scrollToCurrentPlaying = () => {
 export const getDynamicThemeColor = () => {
 	const source = window.mdDynamicThemeColorSource ?? getSetting('dynamic-theme-color-source', 'cover');
 	if (source == 'cover') {
-		return window.mdDominantColor;
-	} else {
+		return window.mdCoverDominantColor;
+	} else if (source == 'bg-enhanced') {
+		return window.mdBGEnhancedDominantColor ?? window.mdCoverDominantColor;
+	}
+	else {
 		const color = window.mdCostomDynamicThemeColor ?? JSON.parse(getSetting('custom-dynamic-theme-color', '[189, 230, 251]'));
 		return (color[0] << 16 >>> 0) | (color[1] << 8 >>> 0) | color[2];
 	}
@@ -482,7 +438,7 @@ export const updateDynamicTheme = () => {
 	dynamicColorController.innerHTML = `:root {${CSS}}`;
 };
 updateDynamicTheme();
-const updateDynamicColor = () => {
+const updateDynamicColorFromCover = () => {
 	const dom = document.querySelector(".m-pinfo .j-cover");
 	if (!dom) return;
 
@@ -499,7 +455,41 @@ const updateDynamicColor = () => {
 	const ranked = Score.score(quantizedColors);
 	const top = ranked[0];
 
-	window.mdDominantColor = top;
+	window.mdCoverDominantColor = top;
+	document.body.dispatchEvent(new CustomEvent('md-dominant-color-change'));
+
+	updateDynamicTheme();
+}
+const updateDynamicColorFromBGEnhanced = () => {
+	const dom = document.querySelector(".BGEnhanced-BackgoundDom .background img");
+	if (!dom) return;
+
+	const canvas = document.createElement('canvas');
+	let width = dom.naturalWidth;
+	let height = dom.naturalHeight;
+	if (width > 60 || height > 60) {
+		const ratio = width / height;
+		if (ratio > 1) {
+			width = 60;
+			height = 60 / ratio;
+		} else {
+			width = 60 * ratio;
+			height = 60;
+		}
+	}
+	canvas.width = width;
+	canvas.height = height;
+	const ctx = canvas.getContext('2d');
+	ctx.drawImage(dom, 0, 0, width, height);
+	const pixels = chunk(ctx.getImageData(0, 0, width, height).data, 4).map((pixel) => {
+		return ((pixel[3] << 24 >>> 0) | (pixel[0] << 16 >>> 0) | (pixel[1] << 8 >>> 0) | pixel[2]) >>> 0;
+	});
+
+	const quantizedColors = QuantizerCelebi.quantize(pixels, 128);
+	const ranked = Score.score(quantizedColors);
+	const top = ranked[0];
+
+	window.mdBGEnhancedDominantColor = top;
 	document.body.dispatchEvent(new CustomEvent('md-dominant-color-change'));
 
 	updateDynamicTheme();
@@ -510,38 +500,31 @@ plugin.onLoad(async (p) => {
 
 	document.body.classList.add('material-you-theme');
 
+	if (loadedPlugins['BGEnhanced']) {
+		document.body.classList.add('md-has-background');
+	}
+
+	// Listen hash change and add attribute
+	window.addEventListener('hashchange', () => {
+		document.body.setAttribute('page-hash', window.location.hash);
+	});
+
 	// Alternative time indicator
 	waitForElement('#main-player', (dom) => {
-		injectHTML('div', `
-			<span id="time-passed">0:00</span>
-			/
-			<span id="time-rest">0:00</span>
-		`, dom, (dom) => {
-			dom.id = 'time-indicator';
-			dom.style = 'opacity: 0';
-		});
-		document.querySelector('#time-rest').addEventListener('click', () => {
-			if ((window.timeIndicator ?? 'remain') == 'remain') {
-				window.timeIndicator = 'total';
-			} else {
-				window.timeIndicator = 'remain';
-			}
-			setSetting('time-indicator', window.timeIndicator);
-			updateTimeIndicator();
-			updateTimeIndicatorPosition();
-		});
+		const timeIndicator = document.createElement('div');
+		timeIndicator.style.position = 'unset';
+		dom.appendChild(timeIndicator);
+		ReactDOM.render(<TimeIndicator parentDOM={dom}/>, timeIndicator);
+	});
+	waitForElement('.m-player-fm', (dom) => {
+		const timeIndicator = document.createElement('div');
+		timeIndicator.style.position = 'unset';
+		dom.appendChild(timeIndicator);
+		ReactDOM.render(<TimeIndicator parentDOM={dom}/>, timeIndicator);
+	});
 
-		new MutationObserver(() => {
-			updateTimeIndicator();
-		}).observe(document.querySelector('time.now'), { childList: true });
-		new MutationObserver(() => {
-			updateTimeIndicatorPosition();
-		}).observe(document.querySelector('#main-player .brt'), { childList: true });
-		
-		new MutationObserver(() => {
-			updateTimeIndicatorPosition();
-		}).observe(document.querySelector('#main-player .speed'), { childList: true });
-
+	// Alternative jump to playing location button
+	waitForElement('#main-player', (dom) => {
 		const queueNotifyToast = document.querySelector('#main-player .list .m-queuenotify');
 		new MutationObserver(() => {
 			const jumpToPlaylocationBtn = document.querySelector('button.u-playinglocation');
@@ -663,7 +646,7 @@ plugin.onLoad(async (p) => {
 		toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width || 199) - 199}px`);
 	});
 	
-	// Dynamic scheme color
+	// Dynamic scheme color (cover)
 	waitForElement('.m-pinfo', (dom) => {
 		let oldSrc = '';
 		const update = () => {
@@ -671,7 +654,7 @@ plugin.onLoad(async (p) => {
 			if (oldSrc == img?.src) return;
 			if (img?.complete) {
 				oldSrc = img.src;
-				updateDynamicColor();
+				updateDynamicColorFromCover();
 			} else {
 				img?.addEventListener('load', () => {
 					update();
@@ -683,6 +666,29 @@ plugin.onLoad(async (p) => {
 		}).observe(dom, { childList: true, subtree: true });
 		update();
 	});
+
+	// Dynamic scheme color (BGEnhanced)
+	if (document.body.classList.contains('BGEnhanced')) {
+		waitForElement('.BGEnhanced-BackgoundDom .background', (dom) => {
+			let oldSrc = '';
+			const update = () => {
+				const img = dom.querySelector('img');
+				if (oldSrc == img?.src) return;
+				if (img?.complete) {
+					oldSrc = img.src;
+					updateDynamicColorFromBGEnhanced();
+				} else {
+					img?.addEventListener('load', () => {
+						update();
+					});
+				}
+			};
+			new MutationObserver(() => {
+				update();
+			}).observe(dom, { childList: true, subtree: true });
+			update();
+		});
+	}
 
 	// Add list view switcher
 	window.addEventListener('hashchange', async () => {
