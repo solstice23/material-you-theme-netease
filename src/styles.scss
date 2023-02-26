@@ -892,7 +892,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	.m-tab, .u-tab2 > ul:not(.u-stab), ul.u-tab2, .md-list-view-switcher {
 		border-radius: 200px;
 		background-color: rgba(var(--md-accent-color-rgb), 0.053);
-		width: max-content;
+		width: max-content !important;
 		height: unset;
 		margin-top: 10px;
 		margin-bottom: 10px;
@@ -943,7 +943,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			}
 		}
 	}
-	.u-tab2 > ul a, ul.u-tab2 a{ // dense tab
+	.u-tab2 > ul a, ul.u-tab2 a { // dense tab
 		height: 12px;
 		padding: 14px 16px !important;
 	}
@@ -959,6 +959,62 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 	ul.u-tab2 {
 		margin-left: 50px;
+	}
+	.u-tabbtn { // tabs on newly released page
+		border-radius: 200px;
+		background-color: rgba(var(--md-accent-color-rgb), 0.053);
+		width: max-content;
+		height: unset;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding: 0;
+		border: none !important;
+		> a {
+			border-radius: 200px;
+			height: 100%;
+			transition: background-color .2s ease;
+			margin: 0;
+			position: relative;
+			background: transparent !important;
+			border: none !important;
+			height: 12px;
+			padding: 14px 16px !important;
+			&:hover {
+				background: rgba(var(--md-accent-color-rgb), 0.05);
+			}
+			& {
+				color: rgba(var(--md-accent-color-secondary-rgb), 0.9) !important;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 14px 24px;
+				font-size: 16px !important;
+				margin: 0;
+			}
+			&::after {
+				display: none;
+			}
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				height: 100%;
+				opacity: 0;
+				transform: scaleX(0.32);
+				transition-duration: 200ms;
+				transition-property: transform, opacity;
+				transition-timing-function: ease-out;
+				border-radius: 100px;
+				background: rgba(var(--md-accent-color-rgb), 0.12);
+				z-index: -1;
+			}
+			&.z-sel::before {
+				opacity: 1;
+				transform: scaleX(1);
+			}
+		}
 	}
 	// Main
 	.g-mn {
@@ -1133,6 +1189,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				.ci {
 					display: none;
 				}
+			}
+			section.m-empty {
+				grid-column: 1 / -1;
 			}
 		}
 	}
@@ -1581,7 +1640,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 	// Main: playlist
 	.g-mn {
-		.m-plylist, .u-cover ~ .mtwrap .lst {
+		.m-plylist:not(.m-plylist-recent), .u-cover ~ .mtwrap .lst {
 			width: calc(100% - 50px);
 			margin-left: 25px;
 			margin-top: 25px;
@@ -2339,7 +2398,113 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			margin: 0 !important;
 		}
 	}
-
+	&[page-hash*="/m/disc/newsong/"] { // 最新音乐
+		.hd {
+			.ply {
+				transform: translateY(-13px);
+			}
+			.fav button {
+				height: 24px !important;
+				transform: translateY(-20px);
+			}
+		}
+		.m-plylist {
+			--item-height: 72px !important;
+		}
+		.m-plylist-newsong ul .itm .td:nth-of-type(1) {
+			width: 42%;
+		}
+	}
+	#m-listentosong-root > div { // 听歌识曲
+		> div:first-child, > div:last-child > div:last-child{
+			* {
+				color: var(--md-accent-color-secondary) !important;
+				fill: var(--md-accent-color-secondary) !important;
+			}
+			a[kind] {
+				background-color: rgba(var(--md-accent-color-rgb), 0.3);
+				color: var(--md-accent-color-secondary) !important;
+				border: none;
+				transition: all .25s ease;
+				&:hover {
+					background-color: rgba(var(--md-accent-color-rgb), 1);
+					color: var(--md-accent-color-bg) !important;
+				}
+			}
+			div[radius] {
+				background: var(--md-accent-color);
+				svg {
+					display: block;
+					position: absolute;
+					-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' id='icon%23recog'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h48v48H0z'/%3E%3Cpath d='M37.813 26.03c.802.166 1.32.961 1.157 1.776-1.432 7.172-7.351 12.53-14.485 13.188v4.514a1.492 1.492 0 1 1-2.985 0v-4.516c-7.127-.664-13.039-6.019-14.47-13.186a1.506 1.506 0 0 1 1.157-1.776 1.482 1.482 0 0 1 1.747 1.177C11.185 33.474 16.63 38.05 23 38.05c6.37 0 11.815-4.576 13.066-10.843a1.482 1.482 0 0 1 1.747-1.177ZM23 3a9.001 9.001 0 0 1 8.948 8.027 7.198 7.198 0 0 0-.511.156c-3.386 1.165-5.52 4.597-4.374 7.924C27.83 21.332 29.78 22.691 32 23V24a9 9 0 0 1-18 0V12a9 9 0 0 1 9-9Zm16.416 2.091.099.096 3.068 3.245a1.535 1.535 0 0 1-.041 2.145 1.474 1.474 0 0 1-1.999.064l-.111-.106L39.171 9.2l-2.137 7.745c-.205 1.2-1.207 2.34-2.65 2.844-1.948.682-3.962-.05-4.499-1.634-.537-1.585.608-3.422 2.556-4.104a4.281 4.281 0 0 1 2.335-.162l2.226-8.062c.3-1.084 1.603-1.457 2.414-.737Z' fill='%23FFF'/%3E%3C/g%3E%3C/svg%3E");
+					-webkit-mask-repeat: no-repeat;
+					-webkit-mask-position: center;
+					background: var(--md-accent-color-bg);
+				}
+				use {
+					display: none;
+				}
+			}
+		}
+	}
+	&[page-hash*="/m/offline/"], &[page-hash*="/m/cloud/"] { // 本地与下载-下载管理
+		.g-mn {
+			.m-tab {
+				margin-top: 20px !important;
+			}
+			.u-localtab {
+				margin-left: 60px !important;
+			}
+			.u-lcsch {
+				transform: translateY(8px);
+				margin-left: 10px;
+			}
+			.open2 {
+				margin-left: auto !important;
+				margin-right: 50px !important;
+			}
+		}
+	}
+	&[page-hash*="/m/local/track/"] { // 本地与下载-本地音乐
+		.g-mn {
+			.m-tab {
+				margin-top: 20px !important;
+			}
+			.oper {
+				.buttons > .u-ibtn5 {
+					transform: translate(2px, 8px);
+				}
+			}
+			.u-localstab {
+				flex: 1;
+				display: flex;
+				justify-content: flex-end;
+				transform: translateY(8px);
+				padding-right: 6px;
+			}
+			.u-lcsch {
+				transform: translateY(8px);
+				margin-left: 10px;
+			}
+		}
+	}
+	&[page-hash*="/m/cloud/"] { // 云盘
+		.g-mn {
+			.u-header, .cldstat {
+				margin-left: 60px;
+			}
+			.oper {
+				display: flex;
+				.buttons > .u-ibtn5 {
+					transform: translate(5px, 12px);
+				}
+			}
+			.u-lcsch {
+				margin-left: auto !important;
+				margin-right: 50px !important;
+			}
+		}
+	}
 
 	// NEW UI
 	&:not(.md-disable-new-ui) {
@@ -2372,7 +2537,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			.m-logo {
 				display: none;
 			}
-			header.g-hd {
+			&:not(.mq-playing) header.g-hd {
 				margin-left: var(--sidebar-width);
 				.m-leftbox {
 					left: -9px !important;
@@ -2622,6 +2787,9 @@ body.floating-bottombar:not(.mq-playing) {
 	}
 	.g-sd {
 		bottom: 0;
+	}
+	.g-sd .m-nav, .g-mn {
+		padding-bottom: calc(var(--bottombar-elevation) + var(--bottombar-height) + 10px);
 	}
 }
 

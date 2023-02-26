@@ -138,6 +138,9 @@ div.m-layer {
 div.m-layer .zbar .zttl {
     color: rgba(var(--md-accent-color-grey-base-rgb), 0.8);
 }
+div.m-layer .u-icn-laycls svg{
+    fill: rgba(var(--md-accent-color-grey-base-rgb), 0.8);
+}
 .s-fc3 {
     color: rgba(var(--md-accent-color-grey-base-rgb), 0.45);
 }

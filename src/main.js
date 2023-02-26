@@ -138,6 +138,14 @@ const updateGreeting = () => {
 		}
 	}
 }
+const updateDailyRecommendationDate = () => {
+	const ele = document.querySelector('.u-cover-daily .date .day');
+	if (!ele) return;
+	const newDate = (new Date().getHours() < 8 ? new Date(Date.now() - 86400000) : new Date()).getDate();
+	if (ele.innerText != newDate) {
+		ele.innerText = newDate;
+	}
+}
 
 
 const isPlaylistSpecial = (dom) => {
@@ -513,12 +521,16 @@ plugin.onLoad(async (p) => {
 	waitForElement('#main-player', (dom) => {
 		const timeIndicator = document.createElement('div');
 		timeIndicator.style.position = 'unset';
+		timeIndicator.classList.add('time-indicator-container');
+		timeIndicator.classList.add('md-time-indicator-container');
 		dom.appendChild(timeIndicator);
 		ReactDOM.render(<TimeIndicator parentDOM={dom}/>, timeIndicator);
 	});
 	waitForElement('.m-player-fm', (dom) => {
 		const timeIndicator = document.createElement('div');
 		timeIndicator.style.position = 'unset';
+		timeIndicator.classList.add('time-indicator-container');
+		timeIndicator.classList.add('md-time-indicator-container');
 		dom.appendChild(timeIndicator);
 		ReactDOM.render(<TimeIndicator parentDOM={dom}/>, timeIndicator);
 	});
@@ -542,6 +554,7 @@ plugin.onLoad(async (p) => {
 	// Greeting and two recomment playlists
 	setInterval(() => {
 		updateGreeting();
+		updateDailyRecommendationDate();
 	}, 30000);
 	updateGreeting();
 	waitForElement('.g-mn', (dom) => {
