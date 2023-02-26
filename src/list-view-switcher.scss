@@ -34,7 +34,7 @@
 body[data-list-view='compact'] {
 	.g-mn {
 		.m-plylist, .u-cover ~ .mtwrap .lst {
-			--item-height: 40px;
+			--item-height: 40px !important;
 			--cover-size: 25px;
 			> ul, .head + .j-flag {
 				.itm .td.title{
@@ -51,7 +51,7 @@ body[data-list-view='compact'] {
 body[data-list-view='comfortable'] {
 	.g-mn {
 		.m-plylist, .u-cover ~ .mtwrap .lst {
-			--item-height: 50px;
+			--item-height: 50px !important;
 			--cover-size: 35px;
 		}
 	}
@@ -59,7 +59,7 @@ body[data-list-view='comfortable'] {
 body[data-list-view='spacious'] {
 	.g-mn {
 		.m-plylist, .u-cover ~ .mtwrap .lst {
-			--item-height: 70px;
+			--item-height: 70px !important;
 			--cover-size: 55px;
 		}
 	}
