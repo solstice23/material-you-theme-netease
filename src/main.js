@@ -42,6 +42,13 @@ const setHref = (id, href) => {
 		dom.href = href;
 	}
 }
+const getCalculatedPrimaryColorBGRHEX = () => { // HEX (Blue Green Red)
+	const color = window.getComputedStyle(document.body).getPropertyValue('--md-accent-color');
+	const rgb = color.match(/\d+/g);
+	const bgr = rgb.reverse();
+	return bgr.map((v) => parseInt(v).toString(16).padStart(2, '0')).join('');
+}
+
 
 const overrideNCMCSS = (mutated) => {
 	if (mutated == 'pri-skin-gride') {
@@ -59,6 +66,35 @@ const overrideNCMCSS = (mutated) => {
 		);
 	}
 }
+const updateNativeTheme = () => {
+	if (window.mdThemeType == 'dark') {
+		channel.call('app.loadSkinPackets', ()=>{}, ["default", "default", {btn_color: {h: 0, s: 89, l: 59}}]);
+	} else {
+		channel.call('app.loadSkinPackets', ()=>{}, ["default", "red", {btn_color: {h: 0, s: 89, l: 59}}]);
+	}
+}
+// Hook context menu
+const _channalCall = channel.call;
+channel.call = (name, ...args) => {
+	//console.log(name, args);
+	if (name === 'winhelper.updateMenuItem') {
+		const primary = `#ff${getCalculatedPrimaryColorBGRHEX()}`;
+		args[1] = args[1].map((item) => {
+			if (item.color) item.color = primary;
+			return item;
+		});
+	} else if (name === 'winhelper.popupMenu') {
+		const primary = `#ff${getCalculatedPrimaryColorBGRHEX()}`;
+		let content = JSON.parse(args[1][0].content);
+		//console.log(content);
+		content = content.map((item) => {
+			if (item.image_color) item.image_color = primary;
+			return item;
+		});
+		args[1][0].content = JSON.stringify(content);
+	}
+	_channalCall(name, ...args);
+};
 
 export const applyScheme = (scheme) => {
 	window.mdScheme = scheme;
@@ -71,6 +107,7 @@ export const applyScheme = (scheme) => {
 			window.mdThemeType = mode;
 			overrideNCMCSS('pri-skin-gride');
 			overrideNCMCSS('skin_default');
+			updateNativeTheme();
 		}
 		window.mdScheme = scheme;
 		updateDynamicTheme();
@@ -106,6 +143,7 @@ export const applyScheme = (scheme) => {
 	}
 	overrideNCMCSS('pri-skin-gride');
 	overrideNCMCSS('skin_default');
+	updateNativeTheme();
 }
 
 const initSettings = () => {
@@ -732,6 +770,7 @@ plugin.onLoad(async (p) => {
 			window.mdThemeType = media.matches ? 'dark' : 'light';
 			overrideNCMCSS('pri-skin-gride');
 			overrideNCMCSS('skin_default');
+			updateNativeTheme();
 		}
 	};
 	const systemDarkmodeMedia = window.matchMedia('(prefers-color-scheme: dark)');
