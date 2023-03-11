@@ -603,6 +603,10 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				-webkit-mask-size: 85%;
 				-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' width='24'%3E%3Cpath d='M4.125 21.75q-.775 0-1.325-.55-.55-.55-.55-1.325V8.05q0-.6.338-1.075.337-.475.862-.675l12.3-5 .6 1.55-8.2 3.325h11.725q.775 0 1.325.55.55.55.55 1.325v11.825q0 .775-.55 1.325-.55.55-1.325.55Zm0-1.875h15.75V12.95H4.125v6.925Zm3.925-1.05q1.025 0 1.725-.7.7-.7.7-1.725 0-1.025-.7-1.725-.7-.7-1.725-.7-1.025 0-1.725.7-.7.7-.7 1.725 0 1.025.7 1.725.7.7 1.725.7Zm-3.925-7.75h11.85V9.1h1.875v1.975h2.025V8.05H4.125Zm0 8.8V12.95v6.925Z'/%3E%3C/svg%3E");
 			}
+			&.np-inner::before {
+				-webkit-mask-size: 85%;
+				-webkit-mask-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='20' width='20'%3E%3Cpath d='M8.5 17q-1.25 0-2.125-.875T5.5 14q0-1.25.875-2.125T8.5 11q.417 0 .792.115.375.114.708.302V3h4.5v3h-3v8q0 1.25-.875 2.125T8.5 17Z'/%3E%3C/svg%3E");
+			}
 		}
 		ul.my li a {
 			color: rgba(var(--md-accent-color-secondary-rgb), 0.8)/* !important*/;
@@ -2583,13 +2587,13 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		display: none;
 	}
 	&:not(.mq-playing) {
-		&.md-has-background, &.bg-enhanced, &.refined-now-playing[page-hash*='/m/fm/'] {
+		&.md-has-background, &.bg-enhanced, &.refined-now-playing[page-hash*='/m/fm/'], &.refined-now-playing.now-playing-page {
 			#md-theme-setting .md-transparent-framework-switch { // md settings items
 				display: flex;
 			}
 
 			--frame-transparency: 0.25;
-			&.transparent-framework, &.refined-now-playing[page-hash*='/m/fm/'] {
+			&.transparent-framework, &.refined-now-playing[page-hash*='/m/fm/'], &.refined-now-playing.now-playing-page {
 				--frame-transparency: 0;
 				#main-player, .m-player-fm {
 					background: transparent !important;
@@ -2662,7 +2666,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				#main-player, .m-player-fm {
 					.prg {
 						.track, .download {
-							opacity: .2 !important;
+							opacity: .15 !important;
 						}
 					}
 				}

@@ -1,5 +1,6 @@
 import './styles.scss';
 import './dynamic-theme.scss'
+import './refined-now-playing-accent-color-compatibility.scss'
 import { injectHTML, waitForElement, waitForElementAsync, getSetting, setSetting, makeToast, chunk } from './utils.js';
 import { argb2Rgb } from './color-utils.js';
 import { schemePresets } from './scheme-presets.js';

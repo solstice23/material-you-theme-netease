@@ -1,0 +1,38 @@
+body.md-dynamic-theme, body:not(.md-dynamic-theme) {
+	&.md-dynamic-theme-light, &.md-dynamic-theme-auto.md-light, &.md-dynamic-theme-dark, &.md-dynamic-theme-auto.md-dark {
+		&.refined-now-playing {
+			&[page-hash*='/m/fm/'][style*='-fm'] {
+				> * {
+					--md-accent-color: var(--rnp-accent-color-fm) !important;
+					--md-accent-color-rgb: var(--rnp-accent-color-rgb-fm) !important;
+					--md-accent-color-secondary: var(--rnp-accent-color-shade-2-fm) !important;
+					--md-accent-color-secondary-rgb: var(--rnp-accent-color-shade-2-rgb-fm) !important;
+					--md-accent-color-bg: var(--rnp-accent-color-on-primary-fm) !important;
+					--md-accent-color-bg-rgb: var(--rnp-accent-color-on-primary-rgb-fm) !important;
+					--md-accent-color-bg-darken: var(--rnp-accent-color-on-primary-fm) !important;
+					--md-accent-color-bg-darken-rgb: var(--rnp-accent-color-on-primary-rgb-fm) !important;
+					--md-accent-color-grey-base: rgb(255, 255, 255) !important;
+					--md-accent-color-grey-base-rgb: 255, 255, 255 !important;
+				}
+				#md-settings-menu-container {
+					display: none;
+				}
+			}
+		}
+		&.now-playing-page {
+			> * {
+				--md-accent-color: var(--rnp-accent-color) !important;
+				--md-accent-color-rgb: var(--rnp-accent-color-rgb) !important;
+				--md-accent-color-secondary: var(--rnp-accent-color-shade-2) !important;
+				--md-accent-color-secondary-rgb: var(--rnp-accent-color-shade-2-rgb) !important;
+				--md-accent-color-bg: var(--rnp-accent-color-on-primary) !important;
+				--md-accent-color-bg-rgb: var(--rnp-accent-color-on-primary-rgb) !important;
+				--md-accent-color-bg-darken: var(--rnp-accent-color-on-primary) !important;
+				--md-accent-color-bg-darken-rgb: var(--rnp-accent-color-on-primary-rgb) !important;
+			}
+			#md-settings-menu-container {
+				display: none;
+			}
+		}
+	}
+}
