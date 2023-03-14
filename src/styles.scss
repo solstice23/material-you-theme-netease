@@ -2391,6 +2391,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 
 	// Special fixes
+	.g-mn {
+		left: calc(var(--sidebar-width, 199px) + 1px) !important;
+	}
 	.m-plylist-lrc {
 		.trans {
 			display: inline;
