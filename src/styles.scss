@@ -165,26 +165,26 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					position: absolute;
 					top: 0;
 					will-change: clip-path;
-					&:first-child {
+					&:first-of-type {
 						left: 0;
 					}
-					&:last-child {
+					&:last-of-type {
 						left: 50%;
 					}
 				}
 				&.btnp-pause svg {
-					&:first-child {
+					&:first-of-type {
 						clip-path: polygon(72% 30%, 86% 30%, 86% 70%, 72% 70%);
 					}
-					&:last-child {
+					&:last-of-type {
 						clip-path: polygon(14% 30%, 28% 30%, 28% 70%, 14% 70%);
 					}
 				}
 				&.btnp-play svg {
-					&:first-child {
+					&:first-of-type {
 						clip-path: polygon(76% 30%, 100% 37.5%, 100% 63.75%, 76% 72%);
 					}
-					&:last-child {
+					&:last-of-type {
 						clip-path: polygon(0% 37.5%, 40% 50%, 40% 50%, 0% 63.75%);
 					}
 				}
@@ -907,6 +907,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			transition: background-color .2s ease;
 			margin: 0;
 			position: relative;
+			overflow: hidden;
 			&:hover {
 				background: rgba(var(--md-accent-color-rgb), 0.05);
 			}
@@ -1101,6 +1102,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				color: var(--md-accent-color);
 				cursor: default !important;
 				opacity: 0;
+				overflow: hidden;
 				transition: transform .25s ease, opacity .3s ease;
 				&:hover {
 					transform: scale(1.1);
@@ -1177,6 +1179,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 						cursor: default !important;
 						opacity: 0;
 						transform: translateY(6px);
+						overflow: hidden;
 						transition: all 0.3s ease;
 						svg {
 							fill: var(--md-accent-color-bg);

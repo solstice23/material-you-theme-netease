@@ -1,0 +1,8 @@
+.md-ripple{
+	border-radius: 50%;
+	position: absolute;
+	background-color: rgba(var(--md-accent-color-grey-base-rgb), 0.07);
+	pointer-events: none;
+	transform: translate(-50%, -50%);
+	z-index: 999;
+}
