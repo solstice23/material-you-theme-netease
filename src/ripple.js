@@ -63,31 +63,29 @@ const getCloestRippleElement = (e) => {
 		return [target, true];
 	}
 	
-	// 首页歌单卡片
+	// 歌单卡片
 	if (target.matches('.md-today-recommend > li .ply')) {
 		return [target, true];
 	}
 	p = target.closest('.md-today-recommend > li');
 	if (p) return [p, false];
 
-	if (target.matches('.m-list-recmd > li .ply')) {
+	if (target.matches('.m-list > li .ply')) {
 		return [target, true];
 	}
-	p = target.closest('.m-list-recmd > li');
+	p = target.closest('.m-list > li');
 	if (p) return [p, false];
 
 	// 歌单条目
 	p = target.closest('.m-plylist ul li');
 	if (p) return [p, false];
 
-
-
 	return [false, false];
 };
 
 
 document.addEventListener('pointerdown', function(e) {
-	console.log(e.target);
+	//console.log(e.target);
 	const [target, invert] = getCloestRippleElement(e);
 	if (target) {
 		addRipple(e, target, invert);
@@ -103,7 +101,6 @@ function addRipple(e, target, invert) {
 	}
 	const ripple = document.createElement('span');
 	ripple.classList.add('md-ripple');
-
 
 	const rect = target.getBoundingClientRect();
 	const diagonal = Math.sqrt(rect.width ** 2 + rect.height ** 2);
