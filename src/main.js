@@ -657,6 +657,7 @@ plugin.onLoad(async (p) => {
 		new MutationObserver(() => {
 			document.body.style.setProperty('--sidebar-width', `${parseInt(dom.style?.width || 199)}px`);
 			toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width || 199) - 199}px`);
+			document.body.classList.add('sidebar-width-adjusted');
 		}).observe(dom, { attributes: true, attributeFilter: ['style'] });
 		document.body.style.setProperty('--sidebar-width', `${parseInt(dom.style?.width || 199)}px`);
 		toolbarLeftPart.style.setProperty('--offset', `${parseInt(dom.style?.width || 199) - 199}px`);

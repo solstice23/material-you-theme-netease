@@ -2385,7 +2385,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 
 	// Special fixes
-	#x-g-mn > .g-mn {
+	&.sidebar-width-adjusted #x-g-mn > .g-mn {
 		left: calc(var(--sidebar-width, 199px) + 1px) !important;
 	}
 	.m-plylist-lrc {
