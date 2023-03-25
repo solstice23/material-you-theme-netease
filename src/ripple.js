@@ -88,6 +88,12 @@ const getCloestRippleElement = (e) => {
 	// 歌单条目
 	p = target.closest('.m-plylist ul li');
 	if (p) return [p, false];
+	// 艺术家歌曲条目
+	p = target.closest('.u-cover ~ .mtwrap .lst ul li');
+	if (p) return [p, false];
+	// 播客条目
+	p = target.closest('.m-tblist:not(:empty) .itm');
+	if (p) return [p, false];
 	// 收藏到歌单 条目
 	p = target.closest('.m-addto .list li') ?? target.closest('.m-addto .newLst');
 	if (p) return [p, false];
@@ -100,7 +106,8 @@ const getCloestRippleElement = (e) => {
 
 
 document.addEventListener('pointerdown', function(e) {
-	console.log(e.target);
+	//console.log(e.target);
+	if (e.button >= 3) return;
 	const [target, invert] = getCloestRippleElement(e);
 	if (target) {
 		addRipple(e, target, invert);
