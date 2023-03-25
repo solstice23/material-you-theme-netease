@@ -2139,6 +2139,16 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		&.m-card-arrow-bottom { transform-origin: top; }
 		&.m-card-arrow-left { transform-origin: right; }
 	}
+	// Components: share card
+	div.m-card-sharecard{
+		padding-bottom: 0 !important;
+		.zbar{
+			cursor: auto !important;
+		}
+		li:hover {
+			background-color: rgba(var(--md-accent-color-rgb), 0.1);
+		}
+	}
 	// Components: checkbox
 	.u-cklist input[type=checkbox]:checked + span svg {
 		fill: var(--md-accent-color-bg);

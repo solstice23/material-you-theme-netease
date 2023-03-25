@@ -45,6 +45,9 @@ const getCloestRippleElement = (e) => {
 	if (target.matches('.m-player .audioEffect') || target.matches('.m-player .spk') || target.matches('.m-player .listenTogether') || target.matches('.m-player .list')) {
 		return [target, false];
 	}
+	if (target.matches('.m-pinfo .btns .btn')) {
+		return [target, false];
+	}
 	// 歌单顶部按钮
 	if (target.matches('.m-info .btns .u-ibtn5b .u-ibtn5:first-child') || target.matches('.g-mn .oper .u-ibtn5b .u-ibtn5:first-child') || target.matches('.m-plylist .hd .u-ibtn5b .u-ibtn5:first-child')) {
 		return [target, true];
@@ -55,6 +58,9 @@ const getCloestRippleElement = (e) => {
 	if (target.matches('.m-info .tit .name .edt')) {
 		return [target, false];
 	}
+	if (target.matches('.g-mn .oper .u-ibtn5') || target.matches('.g-mn .m-plylist .hd .u-ibtn5')) {
+		return [target, true];
+	}
 	// 普通按钮
 	if (target.matches('.u-ibtn1') || target.matches('.ply.s-fc1')) {
 		return [target, true];
@@ -62,7 +68,11 @@ const getCloestRippleElement = (e) => {
 	if (target.matches('.u-ibtn5.u-ibtnsz1') || target.matches('.btns > .u-ibtn5:not([data-res-action])')) {
 		return [target, true];
 	}
-	
+	// 分享菜单
+	if (target.matches('.m-card-sharecard li')) {
+		return [target, false];
+	}
+
 	// 歌单卡片
 	if (target.matches('.md-today-recommend > li .ply')) {
 		return [target, true];
@@ -75,17 +85,22 @@ const getCloestRippleElement = (e) => {
 	}
 	p = target.closest('.m-list > li');
 	if (p) return [p, false];
-
 	// 歌单条目
 	p = target.closest('.m-plylist ul li');
 	if (p) return [p, false];
+	// 收藏到歌单 条目
+	p = target.closest('.m-addto .list li') ?? target.closest('.m-addto .newLst');
+	if (p) return [p, false];
+	// 左下角封面
+	p = target.closest('.m-pinfo .u-cover .lnk');
+	if (p) return [p, true];
 
 	return [false, false];
 };
 
 
 document.addEventListener('pointerdown', function(e) {
-	//console.log(e.target);
+	console.log(e.target);
 	const [target, invert] = getCloestRippleElement(e);
 	if (target) {
 		addRipple(e, target, invert);
@@ -125,8 +140,10 @@ function addRipple(e, target, invert) {
 		speed = 1.2 * (diagonal / 200);
 		status = 'release';
 		document.removeEventListener('pointerup', onMouseUp);
+		document.removeEventListener('mouseout', onMouseUp);
 	}
 	document.addEventListener('pointerup', onMouseUp);
+	document.addEventListener('mouseout', onMouseUp);
 
 	let animation = null;
 
@@ -142,6 +159,8 @@ function addRipple(e, target, invert) {
 			ripple.style.opacity = Math.max(opacity, 0);
 			if (opacity <= 0) {
 				cancelAnimationFrame(animation);
+				document.removeEventListener('pointerup', onMouseUp);
+				document.removeEventListener('mouseout', onMouseUp);
 				ripple.remove();
 				return;
 			}
