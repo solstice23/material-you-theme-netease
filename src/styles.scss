@@ -2534,7 +2534,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				background: transparent;
 			}
 		}
-		.g-mn {
+		.g-mn:not(.better-ncm-manager) {
 			background: var(--md-accent-color-bg);
 			border-radius: 20px 0 0 0;
 		}
