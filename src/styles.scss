@@ -1064,7 +1064,6 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				}
 			}
 			.desc {
-				padding-left: 20px;
 				flex: 1;
 				height: 100%;
 				> * {
@@ -1076,6 +1075,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
+					padding-left: 20px;
 				}
 				a, a * {
 					font-size: 16px;
@@ -2140,9 +2140,9 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 		&.m-card-arrow-left { transform-origin: right; }
 	}
 	// Components: share card
-	div.m-card-sharecard{
+	div.m-card-sharecard, div.m-layer-sharecard{
 		padding-bottom: 0 !important;
-		.zbar{
+		&.m-card-arrow-top .zbar{
 			cursor: auto !important;
 		}
 		li:hover {

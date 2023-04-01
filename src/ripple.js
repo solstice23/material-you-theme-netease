@@ -69,7 +69,7 @@ const getCloestRippleElement = (e) => {
 		return [target, true];
 	}
 	// 分享菜单
-	if (target.matches('.m-card-sharecard li')) {
+	if (target.matches('.m-card-sharecard li') || target.matches('.m-layer-sharecard li')) {
 		return [target, false];
 	}
 
