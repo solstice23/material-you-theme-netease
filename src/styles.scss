@@ -1167,6 +1167,8 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 				}
 				.cvr {
 					z-index: 2;
+					aspect-ratio: 1 / 1;
+					flex-shrink: 0;
 					.ply {
 						display: block;
 						position: absolute;
@@ -2056,62 +2058,64 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 	}
 
 	// Main: comments
-	.m-comment{
-		.title {
-			font-size: 18px;
-			font-weight: normal;
-			margin-top: 10px;
-			margin-bottom: 20px;
-		}
-		> div > ul {
-			/*column-count: 3;
-			column-gap: 10px;
-			display: grid;*/
-			gap: 15px;
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-			font-size: 14px;
-			.citm:not(.citm-hotmore) {
-				background-color: rgba(var(--md-accent-color-rgb), .05);
-				border-radius: 9px;
-				/*margin-top: 10px;*/
-				padding: 20px 15px;
-				border: none;
-				break-inside: avoid-column;
-				transition: background-color .3s ease;
-				&:hover {
-					background-color: rgba(var(--md-accent-color-rgb), .12);
-				}
-				> div {
-					display: flex;
-					flex-direction: row;
-					height: 100%;
-					gap: 15px;
-					.cwrap {
-						margin: 0;
-						flex: 1;
-						height: 100%;
+	&:not(.md-disable-comment-style) {
+		.m-comment{
+			.title {
+				font-size: 18px;
+				font-weight: normal;
+				margin-top: 10px;
+				margin-bottom: 20px;
+			}
+			> div > ul {
+				/*column-count: 3;
+				column-gap: 10px;
+				display: grid;*/
+				gap: 15px;
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+				font-size: 14px;
+				.citm:not(.citm-hotmore) {
+					background-color: rgba(var(--md-accent-color-rgb), .05);
+					border-radius: 9px;
+					/*margin-top: 10px;*/
+					padding: 20px 15px;
+					border: none;
+					break-inside: avoid-column;
+					transition: background-color .3s ease;
+					&:hover {
+						background-color: rgba(var(--md-accent-color-rgb), .12);
+					}
+					> div {
 						display: flex;
-						flex-direction: column;
-						p {
+						flex-direction: row;
+						height: 100%;
+						gap: 15px;
+						.cwrap {
+							margin: 0;
 							flex: 1;
+							height: 100%;
 							display: flex;
 							flex-direction: column;
-							> a:first-child {
-								margin-bottom: 10px;
-								font-size: 15px;
+							p {
+								flex: 1;
+								display: flex;
+								flex-direction: column;
+								> a:first-child {
+									margin-bottom: 10px;
+									font-size: 15px;
+								}
 							}
-						}
-						.opers {
-							margin-top: 10px;
+							.opers {
+								margin-top: 10px;
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	.g-single-track .g-mn2c .m-comment-play > div:not(:nth-last-child(2)) .title:first-child {
-		padding-top: 20px;
+		.g-single-track .g-mn2c .m-comment-play > div:not(:nth-last-child(2)) .title:first-child {
+			padding-top: 20px;
+		}
 	}
 	
 	// Main: scrollbar
@@ -2662,7 +2666,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 			}
 
 			--frame-transparency: 0.25;
-			&.transparent-framework, &.refined-now-playing[page-hash*='/m/fm/'], &.refined-now-playing.now-playing-page {
+			&.transparent-framework, &.refined-now-playing[page-hash*='/m/fm/']:not(.floating-bottombar), &.refined-now-playing.now-playing-page {
 				--frame-transparency: 0;
 				#main-player, .m-player-fm {
 					background: transparent !important;

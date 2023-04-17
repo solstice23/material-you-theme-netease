@@ -9,6 +9,7 @@ class MDSettings extends React.Component {
 			open: false,
 			scheme: 'dynamic-auto',
 			ignoreNowPlaying: false,
+			disableCommentStyle: false,
 			capsuleSidebar: false,
 			hideNCMLogo: false,
 			disableNewUI: false,
@@ -28,6 +29,7 @@ class MDSettings extends React.Component {
 		this.setState({
 			scheme: getSetting('scheme', 'dynamic-default-auto'),
 			ignoreNowPlaying: getSetting('ignore-now-playing-page', false),
+			disableCommentStyle: getSetting('disable-comment-style', false),
 			capsuleSidebar: getSetting('capsule-sidebar', false),
 			hideNCMLogo: getSetting('hide-ncm-logo', false),
 			disableNewUI: getSetting('disable-new-ui', false),
@@ -178,6 +180,18 @@ class MDSettings extends React.Component {
 							setSetting('ignore-now-playing-page', e.target.checked);
 						}} />
 						<label for="md-ignore-now-playing-page" className="md-checkbox-label">在正在播放页面中不应用主题</label>
+					</div>
+					<div className="md-checkbox-wrapper">
+						<input id="md-disable-comment-style" type="checkbox" className="md-checkbox" checked={ this.state.disableCommentStyle } onChange={ (e) => {
+							this.setState({ disableCommentStyle: e.target.checked });
+							if (e.target.checked) {
+								document.body.classList.add('md-disable-comment-style');
+							} else {
+								document.body.classList.remove('md-disable-comment-style');
+							}
+							setSetting('disable-comment-style', e.target.checked);
+						}} />
+						<label for="md-disable-comment-style" className="md-checkbox-label">禁用评论区样式</label>
 					</div>
 				</div>
 			</div>

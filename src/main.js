@@ -152,6 +152,7 @@ const initSettings = () => {
 	applyScheme(getSetting('scheme', 'dynamic-default-auto'));
 
 	addOrRemoveGlobalClassByOption('ignore-now-playing', getSetting('ignore-now-playing-page', false));
+	addOrRemoveGlobalClassByOption('md-disable-comment-style', getSetting('disable-comment-style', false));
 	addOrRemoveGlobalClassByOption('hide-ncm-logo', getSetting('hide-ncm-logo', false));
 	addOrRemoveGlobalClassByOption('capsule-sidebar', getSetting('capsule-sidebar', false));
 	addOrRemoveGlobalClassByOption('md-disable-new-ui', getSetting('disable-new-ui', false));

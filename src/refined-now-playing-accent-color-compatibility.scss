@@ -2,7 +2,7 @@ body.md-dynamic-theme, body:not(.md-dynamic-theme) {
 	&.md-dynamic-theme-light, &.md-dynamic-theme-auto.md-light, &.md-dynamic-theme-dark, &.md-dynamic-theme-auto.md-dark {
 		&.refined-now-playing {
 			&[page-hash*='/m/fm/'][style*='-fm'] {
-				> * {
+				> *:not(.m-layer) {
 					--md-accent-color: var(--rnp-accent-color-fm) !important;
 					--md-accent-color-rgb: var(--rnp-accent-color-rgb-fm) !important;
 					--md-accent-color-secondary: var(--rnp-accent-color-shade-2-fm) !important;
