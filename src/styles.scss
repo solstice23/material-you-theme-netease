@@ -2100,6 +2100,7 @@ body:not(.ignore-now-playing), body.ignore-now-playing:not(.mq-playing) {
 								flex: 1;
 								display: flex;
 								flex-direction: column;
+								align-items: flex-start;
 								> a:first-child {
 									margin-bottom: 10px;
 									font-size: 15px;
