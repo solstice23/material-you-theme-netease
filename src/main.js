@@ -449,7 +449,6 @@ export const getThemeCSSFromColor = (schemeName = null) => {
 			newCSSItems[`--md-dynamic-${colorMode}-${name}`] = `rgb(${r}, ${g}, ${b})`;
 			newCSSItems[`--md-dynamic-${colorMode}-${name}-rgb`] = `${r}, ${g}, ${b}`;
 		}
-		console.log(MaterialDynamicColors);
 		for (let colorMode of ['light', 'dark']) {
 			updateColor(colorMode, 'primary', 'primary');
 			updateColor(colorMode, 'secondary', 'secondary');
