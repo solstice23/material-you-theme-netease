@@ -6,7 +6,7 @@ import { injectHTML, waitForElement, waitForElementAsync, getSetting, setSetting
 import { argb2Rgb } from './color-utils.js';
 import { schemePresets } from './scheme-presets.js';
 import { initSettingMenu } from './settings.js';
-import { themeFromSourceColor, QuantizerCelebi, Hct, Score, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "../material-color-utilities/typescript/dist";
+import { themeFromSourceColor, QuantizerCelebi, Hct, Score, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "@material/material-color-utilities";
 import { ListViewSwitcher } from './list-view-switcher.js';
 import { TimeIndicator } from './time-indicator.js';
 
@@ -429,6 +429,7 @@ export const getThemeCSSFromColor = (schemeName = null) => {
 			'vibrant': SchemeVibrant,
 			'expressive': SchemeExpressive,
 			'neutral': SchemeNeutral,
+			//'monochrome': SchemeMonochrome,
 		};
 		const dynamicScheme = {};
 		dynamicScheme.light = new schemeGenerator[schemeName](
@@ -448,11 +449,12 @@ export const getThemeCSSFromColor = (schemeName = null) => {
 			newCSSItems[`--md-dynamic-${colorMode}-${name}`] = `rgb(${r}, ${g}, ${b})`;
 			newCSSItems[`--md-dynamic-${colorMode}-${name}-rgb`] = `${r}, ${g}, ${b}`;
 		}
+		console.log(MaterialDynamicColors);
 		for (let colorMode of ['light', 'dark']) {
 			updateColor(colorMode, 'primary', 'primary');
 			updateColor(colorMode, 'secondary', 'secondary');
 			updateColor(colorMode, 'background', 'bg');
-			updateColor(colorMode, 'surfaceSub2', 'bg-darken');
+			updateColor(colorMode, 'surfaceContainerLowest', 'bg-darken');
 		}
 		return newCSSItems;
 	}

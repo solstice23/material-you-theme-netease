@@ -72,6 +72,7 @@ class MDSettings extends React.Component {
 						<DynamicSchemeSet name="vibrant" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<DynamicSchemeSet name="expressive" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<DynamicSchemeSet name="neutral" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
+						{/*<DynamicSchemeSet name="monochrome" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />*/}
 					</div>
 					<CustomDynamicThemeSetting show={ this.state.scheme.startsWith('dynamic-') } />
 					<div className="md-scheme-list">
