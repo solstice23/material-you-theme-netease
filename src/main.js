@@ -6,7 +6,7 @@ import { injectHTML, waitForElement, waitForElementAsync, getSetting, setSetting
 import { argb2Rgb } from './color-utils.js';
 import { schemePresets } from './scheme-presets.js';
 import { initSettingMenu } from './settings.js';
-import { themeFromSourceColor, QuantizerCelebi, Hct, Score, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "@material/material-color-utilities";
+import { themeFromSourceColor, QuantizerCelebi, Hct, Score, SchemeExpressive, SchemeVibrant, SchemeMonochrome, SchemeFidelity, SchemeTonalSpot, SchemeNeutral, MaterialDynamicColors } from "@material/material-color-utilities";
 import { ListViewSwitcher } from './list-view-switcher.js';
 import { TimeIndicator } from './time-indicator.js';
 
@@ -430,6 +430,7 @@ export const getThemeCSSFromColor = (schemeName = null) => {
 			'expressive': SchemeExpressive,
 			'neutral': SchemeNeutral,
 			//'monochrome': SchemeMonochrome,
+			'fidelity': SchemeFidelity
 		};
 		const dynamicScheme = {};
 		dynamicScheme.light = new schemeGenerator[schemeName](

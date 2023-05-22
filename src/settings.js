@@ -71,6 +71,7 @@ class MDSettings extends React.Component {
 						<DynamicSchemeSet name="tonal-spot" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<DynamicSchemeSet name="vibrant" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<DynamicSchemeSet name="expressive" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
+						<DynamicSchemeSet name="fidelity" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						<DynamicSchemeSet name="neutral" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />
 						{/*<DynamicSchemeSet name="monochrome" activeScheme={ this.state.scheme } setScheme={ this.setScheme } />*/}
 					</div>
